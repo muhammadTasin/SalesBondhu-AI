@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Compass, Store, Bot, BarChart3, Settings } from 'lucide-react';
+import { Home, Compass, Store, Bot, BarChart3, LayoutDashboard, Users, AlertTriangle, Map, FileText } from 'lucide-react';
 import { getCurrentRole } from '../lib/mockSession';
 
 export const BottomNav: React.FC = () => {
@@ -19,8 +19,11 @@ export const BottomNav: React.FC = () => {
   ];
 
   const managerTabs = [
-    { name: 'ড্যাশবোর্ড', Icon: BarChart3, path: '/manager' },
-    { name: 'সেটিংস', Icon: Settings, path: '/settings' }
+    { name: 'ড্যাশবোর্ড', Icon: LayoutDashboard, path: '/manager' },
+    { name: 'টিম', Icon: Users, path: '/manager/officer/demo-officer' },
+    { name: 'ঝুঁকি', Icon: AlertTriangle, path: '/manager/risks' },
+    { name: 'টেরিটরি', Icon: Map, path: '/manager/territory' },
+    { name: 'রিপোর্ট', Icon: FileText, path: '/manager/reports' }
   ];
 
   const tabs = (role === 'manager' || role === 'admin') ? managerTabs : officerTabs;
@@ -32,7 +35,10 @@ export const BottomNav: React.FC = () => {
   return (
     <div className="absolute bottom-0 left-0 right-0 h-16 bg-white shadow-[0px_-4px_20px_rgba(0,0,0,0.05)] border-t border-[#c5c6cd]/30 flex justify-around items-center px-1 z-50">
       {tabs.map((tab) => {
-        const isActive = location.pathname === tab.path;
+        // Match exact path or subpath for officerId detail page to keep Team tab active
+        const isActive = tab.path.startsWith('/manager/officer') 
+          ? location.pathname.startsWith('/manager/officer')
+          : location.pathname === tab.path;
         return (
           <button
             key={tab.path}
@@ -54,3 +60,4 @@ export const BottomNav: React.FC = () => {
     </div>
   );
 };
+

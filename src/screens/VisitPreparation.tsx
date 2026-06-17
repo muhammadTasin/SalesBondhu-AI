@@ -177,7 +177,7 @@ export const VisitPreparation: React.FC = () => {
           {lang === 'BN' ? 'কোচকে জিজ্ঞেস করুন' : 'Ask AI Coach'}
         </button>
         <button
-          onClick={() => navigate(`/active-visit/${dealerId || 1}`)}
+          onClick={() => navigate(`/active-visit/${dealerId || 'rahman-traders'}`)}
           className="flex-1 py-3 px-4 rounded-full bg-[#006c49] text-white text-xs font-bold flex items-center justify-center gap-1 hover:bg-[#0c714d] active:scale-95 transition-transform shadow-md"
         >
           <Play size={16} className="shrink-0 fill-current" />

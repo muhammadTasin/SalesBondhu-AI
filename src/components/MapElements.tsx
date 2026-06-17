@@ -32,7 +32,7 @@ export const MapRadar: React.FC<MapRadarProps> = ({ range = '1km' }) => {
 interface DealerBubbleProps {
   top: string;
   left: string;
-  level: 'urgent' | 'warning' | 'normal' | 'lead';
+  level: 'urgent' | 'warning' | 'normal' | 'lead' | 'potential';
   icon: React.ReactNode;
   label?: string;
   isActive?: boolean;
@@ -62,6 +62,9 @@ export const DealerBubble: React.FC<DealerBubbleProps> = ({
     case 'lead':
       bgColor = 'bg-[#d6e3fe] text-[#0e1c2f] border-[#c5c6cd]/30';
       break;
+    case 'potential':
+      bgColor = 'bg-[#008080] text-white border-white';
+      break;
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -71,10 +74,15 @@ export const DealerBubble: React.FC<DealerBubbleProps> = ({
     }
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onClick) onClick();
+  };
+
   return (
     <button
       style={{ top, left }}
-      onClick={onClick}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
       type="button"
       role="button"
