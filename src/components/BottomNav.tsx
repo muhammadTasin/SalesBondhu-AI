@@ -1,12 +1,16 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Compass, Store, Bot, BarChart3 } from 'lucide-react';
+import { Home, Compass, Store, Bot, BarChart3, Settings } from 'lucide-react';
+import { getCurrentRole } from '../lib/mockSession';
 
 export const BottomNav: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const role = getCurrentRole();
 
-  const tabs = [
+  if (!role) return null;
+
+  const officerTabs = [
     { name: 'হোম', Icon: Home, path: '/today' },
     { name: 'ম্যাপ', Icon: Compass, path: '/map' },
     { name: 'ডিলার', Icon: Store, path: '/visit-plan' },
@@ -14,7 +18,14 @@ export const BottomNav: React.FC = () => {
     { name: 'রিপোর্ট', Icon: BarChart3, path: '/end-day-report' }
   ];
 
-  const handleTabClick = (tab: typeof tabs[0]) => {
+  const managerTabs = [
+    { name: 'ড্যাশবোর্ড', Icon: BarChart3, path: '/manager' },
+    { name: 'সেটিংস', Icon: Settings, path: '/settings' }
+  ];
+
+  const tabs = (role === 'manager' || role === 'admin') ? managerTabs : officerTabs;
+
+  const handleTabClick = (tab: { path: string }) => {
     navigate(tab.path);
   };
 
