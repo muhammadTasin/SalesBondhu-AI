@@ -3,12 +3,12 @@ import { LoginRoleSelection } from '../screens/LoginRoleSelection';
 import { DutyTrackingConsent } from '../screens/DutyTrackingConsent';
 import { TodayDashboard } from '../screens/TodayDashboard';
 import { FieldMapIntelligence } from '../screens/FieldMapIntelligence';
+import { OptimizedRoute } from '../screens/OptimizedRoute';
+import { TodayVisitPlan } from '../screens/TodayVisitPlan';
+import { VisitPreparation } from '../screens/VisitPreparation';
+import { ActiveVisit } from '../screens/ActiveVisit';
 
-// Placeholder screen components for the remaining 12 screens
-export const OptimizedRouteScreen = () => <div className="p-8"><h1>Optimized Route</h1><p>Placeholder Screen</p></div>;
-export const VisitPlanScreen = () => <div className="p-8"><h1>Today's Visit Plan</h1><p>Placeholder Screen</p></div>;
-export const VisitPrepScreen = () => <div className="p-8"><h1>Visit Preparation</h1><p>Placeholder Screen</p></div>;
-export const ActiveVisitScreen = () => <div className="p-8"><h1>Active Visit</h1><p>Placeholder Screen</p></div>;
+// Placeholder screen components for the remaining 8 screens
 export const SalesCoachScreen = () => <div className="p-8"><h1>Sales Coach AI</h1><p>Placeholder Screen</p></div>;
 export const TrackingTimelineScreen = () => <div className="p-8"><h1>Tracking Timeline</h1><p>Placeholder Screen</p></div>;
 export const EndDayReportScreen = () => <div className="p-8"><h1>End-of-Day Report</h1><p>Placeholder Screen</p></div>;
@@ -24,11 +24,11 @@ export const AppRoutes = () => {
       <Route path="/login" element={<LoginRoleSelection />} />
       <Route path="/duty" element={<DutyTrackingConsent />} />
       <Route path="/today" element={<TodayDashboard />} />
-      <Route path="/route" element={<OptimizedRouteScreen />} />
+      <Route path="/route" element={<OptimizedRoute />} />
       <Route path="/map" element={<FieldMapIntelligence />} />
-      <Route path="/visit-plan" element={<VisitPlanScreen />} />
-      <Route path="/visit-prep/:dealerId" element={<VisitPrepScreen />} />
-      <Route path="/active-visit/:visitId" element={<ActiveVisitScreen />} />
+      <Route path="/visit-plan" element={<TodayVisitPlan />} />
+      <Route path="/visit-prep/:dealerId" element={<VisitPreparation />} />
+      <Route path="/active-visit/:visitId" element={<ActiveVisit />} />
       <Route path="/coach" element={<SalesCoachScreen />} />
       <Route path="/timeline" element={<TrackingTimelineScreen />} />
       <Route path="/end-day-report" element={<EndDayReportScreen />} />
