@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionButton } from '../components/ActionButton';
 import { PhoneFrame } from '../components/PhoneFrame';
+import { Rocket, IdCard, Lock, Eye, EyeOff, Fingerprint, User, ShieldAlert } from 'lucide-react';
 
 export const LoginRoleSelection: React.FC = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export const LoginRoleSelection: React.FC = () => {
         {/* Header Section */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-[#eff4ff] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-[#c5c6cd]/20">
-            <span className="material-symbols-outlined text-[32px] text-[#0e1c2f]">rocket_launch</span>
+            <Rocket size={32} className="text-[#0e1c2f]" />
           </div>
           <h1 className="text-3xl font-bold text-[#0b1c30] tracking-tight">SalesBondhu AI</h1>
           <p className="text-sm font-medium text-[#44474c] mt-1">
@@ -59,7 +60,7 @@ export const LoginRoleSelection: React.FC = () => {
                 {lang === 'BN' ? 'সেলস অফিসার আইডি' : 'Sales Officer ID'}
               </label>
               <div className="relative flex items-center">
-                <span className="material-symbols-outlined absolute left-3 text-[#75777d] text-xl">badge</span>
+                <IdCard size={20} className="absolute left-3 text-[#75777d]" />
                 <input
                   id="officer-id"
                   type="text"
@@ -77,7 +78,7 @@ export const LoginRoleSelection: React.FC = () => {
                 {lang === 'BN' ? 'পাসওয়ার্ড' : 'Password'}
               </label>
               <div className="relative flex items-center">
-                <span className="material-symbols-outlined absolute left-3 text-[#75777d] text-xl">lock</span>
+                <Lock size={20} className="absolute left-3 text-[#75777d]" />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -89,11 +90,9 @@ export const LoginRoleSelection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 text-[#75777d] hover:text-[#0b1c30] transition-colors focus:outline-none"
+                  className="absolute right-3 text-[#75777d] hover:text-[#0b1c30] transition-colors focus:outline-none flex items-center justify-center"
                 >
-                  <span className="material-symbols-outlined text-xl">
-                    {showPassword ? 'visibility' : 'visibility_off'}
-                  </span>
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
               <div className="flex justify-end mt-1">
@@ -109,14 +108,14 @@ export const LoginRoleSelection: React.FC = () => {
                 type="submit"
                 variant="navy"
                 label={lang === 'BN' ? 'সেলস অফিসার হিসেবে লগইন করুন' : 'Login as Sales Officer'}
-                icon="person"
+                icon={<User size={18} />}
               />
               <ActionButton
                 type="button"
                 variant="light"
                 onClick={handleManagerLogin}
                 label={lang === 'BN' ? 'ম্যানেজার হিসেবে লগইন করুন' : 'Login as Manager'}
-                icon="admin_panel_settings"
+                icon={<ShieldAlert size={18} />}
                 className="bg-[#d3e4fe]/40 hover:bg-[#d3e4fe]/70 border-none font-semibold text-[#0b1c30]"
               />
             </div>
@@ -129,7 +128,7 @@ export const LoginRoleSelection: React.FC = () => {
               type="button"
               className="w-12 h-12 rounded-full bg-[#eff4ff] flex items-center justify-center text-[#0e1c2f] hover:bg-[#dce9ff] hover:text-[#0b1c30] transition-colors active:scale-95 shadow-sm border border-[#c5c6cd]/20"
             >
-              <span className="material-symbols-outlined text-2xl">fingerprint</span>
+              <Fingerprint size={24} />
             </button>
           </div>
         </div>

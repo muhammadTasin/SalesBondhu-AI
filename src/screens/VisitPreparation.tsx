@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { AppHeader } from '../components/AppHeader';
+import { MapPin, Brain, Lightbulb, Target, CheckCircle, MessageSquare, AlertTriangle, XCircle, CheckSquare, Bot, Play } from 'lucide-react';
 
 export const VisitPreparation: React.FC = () => {
   const navigate = useNavigate();
@@ -10,6 +11,10 @@ export const VisitPreparation: React.FC = () => {
 
   const toggleLanguage = () => {
     setLang((prev) => (prev === 'BN' ? 'EN' : 'BN'));
+  };
+
+  const handleAskCoach = () => {
+    alert(lang === 'BN' ? 'কোচ ফিচারটি পরবর্তী ধাপে যুক্ত করা হবে।' : 'AI Coach feature will be added in the next phase.');
   };
 
   return (
@@ -32,20 +37,20 @@ export const VisitPreparation: React.FC = () => {
             </span>
           </div>
           <h2 className="text-xl font-bold text-[#0b1c30] mt-1">Rahman Traders</h2>
-          <p className="text-xs text-[#44474c] flex items-center gap-0.5">
-            <span className="material-symbols-outlined text-sm">location_on</span>
-            Mirpur 10, Dhaka
+          <p className="text-xs text-[#44474c] flex items-center gap-1">
+            <MapPin size={12} className="shrink-0 text-[#75777d]" />
+            <span>Mirpur 10, Dhaka</span>
           </p>
         </div>
 
         {/* AI Insight: Why Go First */}
         <section className="bg-[#0e1c2f] text-white rounded-xl p-4 relative overflow-hidden border border-white/5">
-          <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-            <span className="material-symbols-outlined text-[80px]">psychology</span>
+          <div className="absolute top-2 right-2 opacity-10 pointer-events-none">
+            <Brain size={80} className="text-white" />
           </div>
           
           <h3 className="text-sm font-bold flex items-center gap-1.5 mb-3 text-[#9df4c8]">
-            <span className="material-symbols-outlined fill-current">lightbulb</span>
+            <Lightbulb size={16} className="text-[#9df4c8] shrink-0 fill-current" />
             {lang === 'BN' ? 'কেন আগে যাবেন?' : 'Why Visit First?'}
           </h3>
 
@@ -70,20 +75,20 @@ export const VisitPreparation: React.FC = () => {
         {/* Visit Objectives */}
         <section className="bg-white rounded-xl p-4 shadow-sm border border-[#e5eeff]/50">
           <h3 className="text-sm font-bold text-[#0b1c30] flex items-center gap-1.5 mb-3">
-            <span className="material-symbols-outlined text-[#006c49]">target</span>
+            <Target size={16} className="text-[#006c49] shrink-0" />
             {lang === 'BN' ? 'আজকের ভিজিটের লক্ষ্য' : 'Today\'s Visit Objectives'}
           </h3>
           <ul className="space-y-2 text-xs text-[#44474c]">
             <li className="flex items-start gap-2">
-              <span className="material-symbols-outlined text-[#006c49] text-base mt-0.5">check_circle</span>
+              <CheckCircle size={16} className="text-[#006c49] mt-0.5 shrink-0" />
               <span>{lang === 'BN' ? 'বকেয়া কালেকশন সম্পন্ন করা' : 'Collect outstanding dues of ৳85,000'}</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="material-symbols-outlined text-[#006c49] text-base mt-0.5">check_circle</span>
+              <CheckCircle size={16} className="text-[#006c49] mt-0.5 shrink-0" />
               <span>{lang === 'BN' ? 'সেলস কমার কারণ উদ্ঘাটন করা' : 'Identify reason behind 40% sales decline'}</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="material-symbols-outlined text-[#006c49] text-base mt-0.5">check_circle</span>
+              <CheckCircle size={16} className="text-[#006c49] mt-0.5 shrink-0" />
               <span>
                 {lang === 'BN' ? 'Exterior Paint নতুন স্টক পুশ করা' : 'Push new stock of Exterior Paint'}
               </span>
@@ -94,7 +99,7 @@ export const VisitPreparation: React.FC = () => {
         {/* How to talk scripts */}
         <section className="space-y-3">
           <h3 className="text-sm font-bold text-[#0b1c30] flex items-center gap-1.5 px-1">
-            <span className="material-symbols-outlined text-[#44474c]">forum</span>
+            <MessageSquare size={16} className="text-[#44474c] shrink-0" />
             {lang === 'BN' ? 'কীভাবে কথা বলবেন' : 'How to Speak (Talking Points)'}
           </h3>
           <div className="space-y-3">
@@ -125,16 +130,16 @@ export const VisitPreparation: React.FC = () => {
         {/* What to avoid - Don'ts */}
         <section className="bg-[#ffdad6]/40 rounded-xl p-4 border border-[#ffdad6]">
           <h3 className="text-sm font-bold text-[#ba1a1a] flex items-center gap-1.5 mb-2.5">
-            <span className="material-symbols-outlined text-[#ba1a1a]">warning</span>
+            <AlertTriangle size={16} className="text-[#ba1a1a] shrink-0" />
             {lang === 'BN' ? 'কী করবেন না' : 'What to Avoid (Don\'ts)'}
           </h3>
           <ul className="space-y-2 text-xs text-[#ba1a1a] font-medium">
             <li className="flex items-start gap-1.5">
-              <span className="material-symbols-outlined text-base mt-0.5">close</span>
+              <XCircle size={16} className="text-[#ba1a1a] mt-0.5 shrink-0" />
               <span>{lang === 'BN' ? 'সরাসরি পেমেন্টের জন্য অতিরিক্ত চাপ দেবেন না।' : 'Do not push too hard for immediate payment.'}</span>
             </li>
             <li className="flex items-start gap-1.5">
-              <span className="material-symbols-outlined text-base mt-0.5">close</span>
+              <XCircle size={16} className="text-[#ba1a1a] mt-0.5 shrink-0" />
               <span>
                 {lang === 'BN' ? 'উনার কমপ্লেইন না শুনেই নতুন প্রোডাক্ট পুশ করবেন না।' : 'Do not pitch new products without hearing customer complaints.'}
               </span>
@@ -145,7 +150,7 @@ export const VisitPreparation: React.FC = () => {
         {/* Checklist - What to note */}
         <section className="bg-white rounded-xl p-4 shadow-sm border border-[#e5eeff]/50">
           <h3 className="text-sm font-bold text-[#0b1c30] flex items-center gap-1.5 mb-3">
-            <span className="material-symbols-outlined text-[#44474c]">fact_check</span>
+            <CheckSquare size={16} className="text-[#44474c] shrink-0" />
             {lang === 'BN' ? 'কী নোট করবেন' : 'What to Record'}
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -165,17 +170,17 @@ export const VisitPreparation: React.FC = () => {
       {/* Floating Action Bar */}
       <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[#c5c6cd]/30 p-3 flex gap-3 z-50">
         <button
-          onClick={() => navigate('/coach')}
+          onClick={handleAskCoach}
           className="flex-1 py-3 px-4 rounded-full border border-[#c5c6cd] text-[#0b1c30] text-xs font-bold flex items-center justify-center gap-1 hover:bg-[#eff4ff] active:scale-95 transition-transform"
         >
-          <span className="material-symbols-outlined text-base">support_agent</span>
+          <Bot size={16} className="shrink-0" />
           {lang === 'BN' ? 'কোচকে জিজ্ঞেস করুন' : 'Ask AI Coach'}
         </button>
         <button
           onClick={() => navigate(`/active-visit/${dealerId || 1}`)}
           className="flex-1 py-3 px-4 rounded-full bg-[#006c49] text-white text-xs font-bold flex items-center justify-center gap-1 hover:bg-[#0c714d] active:scale-95 transition-transform shadow-md"
         >
-          <span className="material-symbols-outlined text-base">play_arrow</span>
+          <Play size={16} className="shrink-0 fill-current" />
           {lang === 'BN' ? 'ভিজিট শুরু করুন' : 'Start Visit Now'}
         </button>
       </div>

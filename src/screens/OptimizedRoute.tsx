@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { ActionButton } from '../components/ActionButton';
+import { ArrowLeft, MoreVertical, MapPin, Route, AlertTriangle, Brain, Sparkles, Wallet, TrendingDown, Clock, Play, RefreshCw } from 'lucide-react';
 
 export const OptimizedRoute: React.FC = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const OptimizedRoute: React.FC = () => {
             onClick={() => navigate('/today')}
             className="hover:bg-[#eff4ff] p-2 rounded-full text-[#0b1c30] transition-colors flex items-center justify-center active:scale-95"
           >
-            <span className="material-symbols-outlined text-xl">arrow_back</span>
+            <ArrowLeft size={20} className="shrink-0" />
           </button>
           <div>
             <h1 className="text-sm font-bold text-[#0b1c30]">আজকের সেরা রুট</h1>
@@ -23,7 +24,7 @@ export const OptimizedRoute: React.FC = () => {
           </div>
         </div>
         <button className="hover:bg-[#eff4ff] p-2 rounded-full text-[#75777d] transition-colors flex items-center justify-center active:scale-95">
-          <span className="material-symbols-outlined text-xl">more_vert</span>
+          <MoreVertical size={20} className="shrink-0" />
         </button>
       </header>
 
@@ -44,7 +45,7 @@ export const OptimizedRoute: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white rounded-xl p-3 shadow-sm border border-[#e5eeff]/50 flex flex-col justify-center items-center text-center">
               <div className="flex items-center gap-1 text-[#44474c] mb-1">
-                <span className="material-symbols-outlined text-base">location_on</span>
+                <MapPin size={16} className="shrink-0" />
                 <span className="text-[10px] font-bold">Total Visits</span>
               </div>
               <div className="text-xs font-bold text-[#0b1c30]">৮টি ভিজিট প্ল্যান</div>
@@ -52,7 +53,7 @@ export const OptimizedRoute: React.FC = () => {
             
             <div className="bg-white rounded-xl p-3 shadow-sm border border-[#e5eeff]/50 flex flex-col justify-center items-center text-center">
               <div className="flex items-center gap-1 text-[#44474c] mb-1">
-                <span className="material-symbols-outlined text-base">route</span>
+                <Route size={16} className="shrink-0" />
                 <span className="text-[10px] font-bold">Distance</span>
               </div>
               <div className="text-xs font-bold text-[#0b1c30]">১২.৫ km</div>
@@ -60,7 +61,7 @@ export const OptimizedRoute: React.FC = () => {
 
             <div className="bg-[#ffdad6] rounded-xl p-3 shadow-sm border border-[#ffdad6] flex flex-col justify-center items-center text-center col-span-2">
               <div className="flex items-center gap-1 text-[#ba1a1a] mb-1">
-                <span className="material-symbols-outlined text-base fill-current">warning</span>
+                <AlertTriangle size={16} className="shrink-0" />
                 <span className="text-[10px] font-bold">Urgent Stops</span>
               </div>
               <div className="text-xs font-bold text-[#ba1a1a]">৩টি জরুরি ভিজিট</div>
@@ -69,14 +70,12 @@ export const OptimizedRoute: React.FC = () => {
 
           {/* AI Reason Card */}
           <div className="bg-[#0e1c2f] rounded-xl p-4 shadow-sm relative overflow-hidden text-white border border-white/5">
-            <div className="absolute top-0 right-0 p-4 opacity-10">
-              <span className="material-symbols-outlined text-5xl">psychology</span>
+            <div className="absolute top-2 right-2 opacity-10">
+              <Brain size={48} className="text-white" />
             </div>
             <div className="flex items-start gap-3 relative z-10">
-              <div className="bg-[#006c49]/20 p-2 rounded-full text-[#9df4c8]">
-                <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  auto_awesome
-                </span>
+              <div className="bg-[#006c49]/20 p-2 rounded-full text-[#9df4c8] flex items-center justify-center">
+                <Sparkles size={20} className="shrink-0" />
               </div>
               <div>
                 <div className="text-[10px] font-bold text-[#9df4c8] mb-0.5 uppercase tracking-wider">কেন আগে যাবেন?</div>
@@ -92,7 +91,7 @@ export const OptimizedRoute: React.FC = () => {
             <div className="space-y-3 relative">
               {/* Vertical Connector Line */}
               <div className="absolute left-[18px] top-4 bottom-4 w-0.5 bg-[#d3e4fe] z-0" />
-
+              
               {/* Stop 1 */}
               <div className="bg-white rounded-xl p-3 shadow-sm border border-[#ba1a1a]/20 relative z-10 flex gap-3 items-center">
                 <div className="w-9 h-9 rounded-full bg-[#ba1a1a] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
@@ -106,7 +105,7 @@ export const OptimizedRoute: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-[#ba1a1a] text-xs font-semibold">
-                    <span className="material-symbols-outlined text-base">account_balance_wallet</span>
+                    <Wallet size={16} className="shrink-0" />
                     <span>৳৮৫,০০০ বকেয়া</span>
                   </div>
                 </div>
@@ -120,7 +119,7 @@ export const OptimizedRoute: React.FC = () => {
                 <div className="flex-grow min-w-0">
                   <h4 className="text-xs font-bold text-[#0b1c30] truncate mb-0.5">Karim Paint House</h4>
                   <div className="flex items-center gap-1 text-[#ba1a1a] text-xs font-semibold">
-                    <span className="material-symbols-outlined text-base">trending_down</span>
+                    <TrendingDown size={16} className="shrink-0" />
                     <span>Sales down 40%</span>
                   </div>
                 </div>
@@ -134,7 +133,7 @@ export const OptimizedRoute: React.FC = () => {
                 <div className="flex-grow min-w-0">
                   <h4 className="text-xs font-bold text-[#0b1c30] truncate mb-0.5">Modern Hardware</h4>
                   <div className="flex items-center gap-1 text-[#44474c] text-xs font-semibold">
-                    <span className="material-symbols-outlined text-base">schedule</span>
+                    <Clock size={16} className="shrink-0" />
                     <span>Follow-up pending 14 days</span>
                   </div>
                 </div>
@@ -146,13 +145,13 @@ export const OptimizedRoute: React.FC = () => {
           <div className="flex flex-col gap-2 pt-2">
             <ActionButton
               label="রুট শুরু করুন"
-              icon="play_arrow"
+              icon={<Play size={18} className="shrink-0 fill-current" />}
               onClick={() => navigate('/active-visit/1')}
               variant="emerald"
             />
             <ActionButton
               label="পুনরায় হিসাব করুন"
-              icon="refresh"
+              icon={<RefreshCw size={18} className="shrink-0" />}
               variant="light"
             />
           </div>

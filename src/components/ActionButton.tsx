@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ActionButtonProps {
   label: string;
-  icon?: string;
+  icon?: React.ReactNode;
   onClick?: () => void;
   variant?: 'emerald' | 'navy' | 'light';
   className?: string;
@@ -33,7 +33,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
       className={`w-full rounded-xl py-3 px-4 font-semibold text-sm transition-all flex justify-center items-center gap-1.5 ${btnStyle} ${className}`}
     >
       {label}
-      {icon && <span className="material-symbols-outlined text-[18px]">{icon}</span>}
+      {icon}
     </button>
   );
 };

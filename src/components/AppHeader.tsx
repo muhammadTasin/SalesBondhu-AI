@@ -1,4 +1,5 @@
 import React from 'react';
+import { RefreshCw, MapPin } from 'lucide-react';
 
 interface AppHeaderProps {
   title?: string;
@@ -25,13 +26,13 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         <div className="flex items-center gap-2 mt-1">
           {syncTime && (
             <span className="flex items-center gap-0.5 text-[10px] text-[#44474c]">
-              <span className="material-symbols-outlined text-[12px]">sync</span>
+              <RefreshCw size={10} className="stroke-[2.5px]" />
               সর্বশেষ সিঙ্ক: {syncTime}
             </span>
           )}
           {showGPSStatus && (
             <span className="flex items-center gap-0.5 text-[10px] text-[#006c49] font-medium">
-              <span className="material-symbols-outlined text-[12px] fill-current">location_on</span>
+              <MapPin size={10} className="stroke-[2.5px]" />
               GPS synced
             </span>
           )}

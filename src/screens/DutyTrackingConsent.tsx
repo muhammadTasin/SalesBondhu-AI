@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { AppHeader } from '../components/AppHeader';
+import { MapPin, CircleDot, CheckCircle } from 'lucide-react';
 
 export const DutyTrackingConsent: React.FC = () => {
   const navigate = useNavigate();
@@ -42,9 +43,7 @@ export const DutyTrackingConsent: React.FC = () => {
           {/* Mock Map pin bouncing accent */}
           <div className="relative flex flex-col items-center animate-bounce">
             <div className="w-16 h-16 rounded-full border-[3px] border-[#006c49] flex items-center justify-center bg-white shadow-[0_8px_16px_rgba(0,108,73,0.15)]">
-              <span className="material-symbols-outlined text-[#006c49] text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                location_on
-              </span>
+              <MapPin size={36} className="text-[#006c49]" />
             </div>
             <div className="w-8 h-1.5 bg-[#44474c]/20 rounded-full blur-[1px] mt-2 animate-pulse" />
           </div>
@@ -67,9 +66,7 @@ export const DutyTrackingConsent: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#9af2c5] text-[#0c714d] flex items-center justify-center">
-                <span className="material-symbols-outlined font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  trip_origin
-                </span>
+                <CircleDot size={20} className="stroke-[2.5px]" />
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-[#0b1c30]">
@@ -96,7 +93,7 @@ export const DutyTrackingConsent: React.FC = () => {
           {/* Expandable Status Message */}
           <div className={`overflow-hidden transition-all duration-300 ease-in-out ${dutyActive ? 'max-h-20 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
             <div className="pt-4 border-t border-[#eff4ff] flex items-start gap-2">
-              <span className="material-symbols-outlined text-[#006c49] text-lg mt-0.5">check_circle</span>
+              <CheckCircle size={18} className="text-[#006c49] mt-0.5 shrink-0" />
               <p className="text-xs text-[#006c49] font-medium leading-relaxed">
                 {lang === 'BN'
                   ? 'লোকেশন ট্র্যাকিং সক্রিয় হয়েছে। আপনার রুট অপ্টিমাইজ করা হচ্ছে।'

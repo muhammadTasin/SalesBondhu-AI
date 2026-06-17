@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { AppHeader } from '../components/AppHeader';
+import { Package, Megaphone, Camera, Download, StopCircle } from 'lucide-react';
 
 export const ActiveVisit: React.FC = () => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ export const ActiveVisit: React.FC = () => {
 
   const handleEndVisit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to EOD report or today dashboard
-    navigate('/end-day-report');
+    alert(lang === 'BN' ? 'ভিজিটটি সফলভাবে সম্পন্ন হয়েছে!' : 'Visit completed successfully!');
+    navigate('/today');
   };
 
   const handleSaveOffline = () => {
@@ -168,14 +169,14 @@ export const ActiveVisit: React.FC = () => {
                 type="button"
                 className="border border-dashed border-[#c5c6cd] rounded-lg p-2.5 flex flex-col items-center gap-1 text-[#44474c] hover:bg-[#eff4ff] transition-colors"
               >
-                <span className="material-symbols-outlined text-lg">inventory_2</span>
+                <Package size={18} className="shrink-0 text-[#44474c]" />
                 <span className="text-[9px] font-bold">{lang === 'BN' ? 'স্টক পজিশন' : 'Stock Position'}</span>
               </button>
               <button
                 type="button"
                 className="border border-dashed border-[#c5c6cd] rounded-lg p-2.5 flex flex-col items-center gap-1 text-[#44474c] hover:bg-[#eff4ff] transition-colors"
               >
-                <span className="material-symbols-outlined text-lg">campaign</span>
+                <Megaphone size={18} className="shrink-0 text-[#44474c]" />
                 <span className="text-[9px] font-bold">{lang === 'BN' ? 'ব্র্যান্ডিং মেটেরিয়াল' : 'Branding Materials'}</span>
               </button>
             </div>
@@ -183,7 +184,7 @@ export const ActiveVisit: React.FC = () => {
               type="button"
               className="w-full border-2 border-dashed border-[#c5c6cd] rounded-xl p-3 flex flex-col items-center justify-center text-[#44474c] hover:bg-[#eff4ff] hover:border-[#0e1c2f] transition-colors gap-0.5"
             >
-              <span className="material-symbols-outlined text-xl">add_a_photo</span>
+              <Camera size={20} className="shrink-0 text-[#44474c]" />
               <span className="text-[10px] font-bold">{lang === 'BN' ? 'অন্যান্য ছবি যোগ করুন' : 'Add Other Photos'}</span>
             </button>
           </div>
@@ -195,14 +196,14 @@ export const ActiveVisit: React.FC = () => {
               onClick={handleSaveOffline}
               className="w-full bg-[#eff4ff] text-[#0b1c30] border border-[#c5c6cd]/30 rounded-xl py-3 text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-[#dce9ff] transition-colors active:scale-95 transition-transform"
             >
-              <span className="material-symbols-outlined text-lg">cloud_download</span>
+              <Download size={18} className="shrink-0" />
               {lang === 'BN' ? 'অফলাইনে সেভ করুন' : 'Save Offline'}
             </button>
             <button
               type="submit"
               className="w-full bg-[#ba1a1a] text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:bg-red-700 transition-colors active:scale-95 transition-transform flex items-center justify-center gap-1.5"
             >
-              <span className="material-symbols-outlined text-lg">stop_circle</span>
+              <StopCircle size={18} className="shrink-0 fill-current" />
               {lang === 'BN' ? 'ভিজিট শেষ করুন' : 'End Visit'}
             </button>
           </div>

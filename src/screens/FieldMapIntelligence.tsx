@@ -4,6 +4,7 @@ import { PhoneFrame } from '../components/PhoneFrame';
 import { MapRadar, DealerBubble } from '../components/MapElements';
 import { BottomNav } from '../components/BottomNav';
 import { DealerCard } from '../components/DealerCard';
+import { Search, Store, Plus, Navigation, Locate, ChevronRight } from 'lucide-react';
 
 export const FieldMapIntelligence: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export const FieldMapIntelligence: React.FC = () => {
         {/* Top Search Area */}
         <div className="relative z-30 pt-4 px-4 w-full flex items-center justify-between gap-3">
           <div className="flex-grow bg-white rounded-full shadow-md flex items-center px-4 py-2 border border-[#c5c6cd]/30">
-            <span className="material-symbols-outlined text-[#75777d] mr-2 text-xl">search</span>
+            <Search size={20} className="text-[#75777d] mr-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
@@ -104,7 +105,7 @@ export const FieldMapIntelligence: React.FC = () => {
           top="28%"
           left="60%"
           level="urgent"
-          icon="storefront"
+          icon={<Store size={14} className="text-white shrink-0" />}
           label={lang === 'BN' ? 'রহমান স্টোর' : 'Rahman Store'}
           onClick={() => setSelectedDealer('rahman')}
         />
@@ -112,7 +113,7 @@ export const FieldMapIntelligence: React.FC = () => {
           top="40%"
           left="30%"
           level="warning"
-          icon="storefront"
+          icon={<Store size={14} className="text-[#ba1a1a] shrink-0" />}
           label={lang === 'BN' ? 'করিম পেইন্ট' : 'Karim Paint'}
           onClick={() => setSelectedDealer('karim')}
         />
@@ -120,7 +121,7 @@ export const FieldMapIntelligence: React.FC = () => {
           top="65%"
           left="75%"
           level="normal"
-          icon="storefront"
+          icon={<Store size={14} className="text-white shrink-0" />}
           label={lang === 'BN' ? 'মডার্ন হার্ডওয়্যার' : 'Modern Hardware'}
           onClick={() => setSelectedDealer('modern')}
         />
@@ -128,7 +129,7 @@ export const FieldMapIntelligence: React.FC = () => {
           top="60%"
           left="20%"
           level="lead"
-          icon="add_business"
+          icon={<Plus size={14} className="text-[#0e1c2f] shrink-0" />}
           label={lang === 'BN' ? 'নিউ এরা পেইন্টস' : 'New Era Paints'}
           onClick={() => setSelectedDealer('newera')}
         />
@@ -141,7 +142,7 @@ export const FieldMapIntelligence: React.FC = () => {
                 {lang === 'BN' ? 'খুব জরুরি' : 'Urgent'}
               </span>
               <span className="text-[9px] font-semibold text-[#44474c] flex items-center">
-                <span className="material-symbols-outlined text-[12px] mr-0.5">near_me</span>
+                <Navigation size={12} className="mr-0.5 shrink-0" />
                 {lang === 'BN' ? '১.২ কিমি দূরে' : '1.2 km away'}
               </span>
             </div>
@@ -165,7 +166,7 @@ export const FieldMapIntelligence: React.FC = () => {
                 onClick={() => navigate('/visit-prep/1')}
                 className="w-full bg-[#ba1a1a] text-white py-2 rounded-lg text-xs font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-1 active:scale-95"
               >
-                <span className="material-symbols-outlined text-[14px]">directions_run</span>
+                <Navigation size={14} className="shrink-0" />
                 {lang === 'BN' ? 'আগে ভিজিট করুন' : 'Visit First'}
               </button>
             </div>
@@ -179,9 +180,9 @@ export const FieldMapIntelligence: React.FC = () => {
         <div className="flex justify-end px-4 mb-3">
           <button
             onClick={handleRecenter}
-            className="bg-white text-[#0b1c30] p-2.5 rounded-full shadow-md border border-[#c5c6cd]/30 hover:bg-[#eff4ff] active:scale-95 transition-transform"
+            className="bg-white text-[#0b1c30] p-2.5 rounded-full shadow-md border border-[#c5c6cd]/30 hover:bg-[#eff4ff] active:scale-95 transition-transform flex items-center justify-center"
           >
-            <span className="material-symbols-outlined text-xl block">my_location</span>
+            <Locate size={20} className="shrink-0" />
           </button>
         </div>
 
@@ -203,7 +204,7 @@ export const FieldMapIntelligence: React.FC = () => {
                 className="text-xs font-semibold text-[#1976D2] hover:underline flex items-center"
               >
                 {lang === 'BN' ? 'সব দেখুন' : 'View All'}
-                <span className="material-symbols-outlined text-[14px] ml-0.5">chevron_right</span>
+                <ChevronRight size={14} className="ml-0.5 shrink-0" />
               </button>
             </div>
 

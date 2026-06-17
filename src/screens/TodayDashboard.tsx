@@ -5,6 +5,7 @@ import { AppHeader } from '../components/AppHeader';
 import { ProgressRing } from '../components/ProgressRing';
 import { MetricCard } from '../components/MetricCard';
 import { BottomNav } from '../components/BottomNav';
+import { AlertCircle, Store, TrendingDown, Calendar, Package, ArrowRight, Filter, Truck, Users } from 'lucide-react';
 
 export const TodayDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -51,26 +52,26 @@ export const TodayDashboard: React.FC = () => {
             <div className="flex flex-col gap-2 w-full">
               <div className="flex items-center justify-between w-full">
                 <div className="inline-flex items-center gap-1 bg-[#ba1a1a] text-white font-semibold text-[11px] px-2.5 py-1 rounded-full shadow-sm">
-                  <span className="material-symbols-outlined text-[13px] fill-current">error</span>
+                  <AlertCircle size={13} className="shrink-0" />
                   <span>{lang === 'BN' ? '৳৮৫,০০০ বকেয়া' : '৳85,000 Overdue'}</span>
                 </div>
                 <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
-                  <span className="material-symbols-outlined text-white text-lg">storefront</span>
+                  <Store size={18} className="text-white shrink-0" />
                 </div>
               </div>
               
               <div className="flex flex-wrap gap-2 mt-1">
                 <span className="inline-flex items-center gap-1 bg-white/10 text-white font-semibold text-[10px] px-2 py-0.5 rounded-full border border-white/10">
-                  <span className="material-symbols-outlined text-[12px]">trending_down</span>
+                  <TrendingDown size={12} className="shrink-0" />
                   {lang === 'BN' ? 'সেলস ৩৫% কমেছে' : 'Sales down 35%'}
                 </span>
                 <span className="inline-flex items-center gap-1 bg-white/10 text-white font-semibold text-[10px] px-2 py-0.5 rounded-full border border-white/10">
-                  <span className="material-symbols-outlined text-[12px]">calendar_today</span>
+                  <Calendar size={12} className="shrink-0" />
                   {lang === 'BN' ? '১২ দিন আগে শেষ ভিজিট' : 'Last visit 12d ago'}
                 </span>
               </div>
               <div className="mt-1 inline-flex items-center gap-1 text-[#9af2c5] font-semibold text-[11px]">
-                <span className="material-symbols-outlined text-[14px]">inventory_2</span>
+                <Package size={14} className="shrink-0" />
                 <span>{lang === 'BN' ? 'পণ্য অফার করুন: Exterior Paint' : 'Offer Product: Exterior Paint'}</span>
               </div>
             </div>
@@ -101,7 +102,7 @@ export const TodayDashboard: React.FC = () => {
             className="relative z-10 w-full bg-[#006c49] text-white font-bold text-sm py-3 rounded-xl flex items-center justify-center gap-1.5 hover:bg-[#0c714d] active:scale-95 transition-all shadow-lg"
           >
             {lang === 'BN' ? 'ভিজিট শুরু করুন' : 'Start Visit Now'}
-            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+            <ArrowRight size={18} className="shrink-0" />
           </button>
         </div>
 
@@ -115,7 +116,7 @@ export const TodayDashboard: React.FC = () => {
                 : 'bg-white text-[#44474c] border-[#c5c6cd]/30 hover:bg-[#eff4ff]'
             }`}
           >
-            <span className="material-symbols-outlined text-[14px]">filter_list</span>
+            <Filter size={14} className="shrink-0" />
             {lang === 'BN' ? 'বকেয়া' : 'Dues'}
           </button>
           <button
@@ -145,15 +146,13 @@ export const TodayDashboard: React.FC = () => {
           <MetricCard
             title={lang === 'BN' ? 'আজকের ভিজিট' : 'Today\'s Visits'}
             value={lang === 'BN' ? '৪টি পেন্ডিং' : '4 Pending'}
-            icon="local_shipping"
-            iconColorClass="text-[#006c49]"
+            icon={<Truck size={20} className="text-[#006c49] stroke-[2.5px]" />}
             onClick={() => navigate('/visit-plan')}
           />
           <MetricCard
             title={lang === 'BN' ? 'নতুন লিড' : 'New Leads'}
             value={lang === 'BN' ? '৩ জন নতুন' : '3 New'}
-            icon="groups"
-            iconColorClass="text-[#0e1c2f]"
+            icon={<Users size={20} className="text-[#0e1c2f] stroke-[2.5px]" />}
           />
         </div>
       </main>

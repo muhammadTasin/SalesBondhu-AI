@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapPin } from 'lucide-react';
 
 interface DealerCardProps {
   name: string;
@@ -47,7 +48,7 @@ export const DealerCard: React.FC<DealerCardProps> = ({
         <div>
           <p className="text-sm font-semibold text-[#0b1c30]">{name}</p>
           <p className="text-xs text-[#44474c] flex items-center mt-0.5">
-            <span className="material-symbols-outlined text-[14px] mr-0.5">location_on</span>
+            <MapPin size={12} className="mr-0.5 text-[#75777d] shrink-0" />
             {distance}
           </p>
         </div>
