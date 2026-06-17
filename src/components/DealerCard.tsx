@@ -4,7 +4,7 @@ import { MapPin } from 'lucide-react';
 interface DealerCardProps {
   name: string;
   distance: string;
-  priorityLevel: 'urgent' | 'warning' | 'normal' | 'lead';
+  priorityLevel: 'urgent' | 'warning' | 'normal' | 'lead' | 'potential';
   priorityText: string;
   actionText?: string;
   onActionClick?: (e: React.MouseEvent) => void;
@@ -43,6 +43,10 @@ export const DealerCard: React.FC<DealerCardProps> = ({
     case 'lead':
       indicatorColor = 'bg-[#d6e3fe]';
       borderColor = 'border-[#e5eeff]/50';
+      break;
+    case 'potential':
+      indicatorColor = 'bg-[#008080]';
+      borderColor = 'border-[#008080]/30';
       break;
   }
 
