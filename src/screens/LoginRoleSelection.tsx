@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ActionButton } from '../components/ActionButton';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { Rocket, IdCard, Lock, Eye, EyeOff, Fingerprint, User, ShieldAlert } from 'lucide-react';
+import { setCurrentRole } from '../lib/mockSession';
 
 export const LoginRoleSelection: React.FC = () => {
   const navigate = useNavigate();
@@ -13,11 +14,12 @@ export const LoginRoleSelection: React.FC = () => {
 
   const handleOfficerLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // In final stage, this will verify Supabase auth. For now, redirect to consent page (/duty)
-    navigate('/duty');
+    setCurrentRole('sales_officer');
+    navigate('/today');
   };
 
   const handleManagerLogin = () => {
+    setCurrentRole('manager');
     navigate('/manager');
   };
 

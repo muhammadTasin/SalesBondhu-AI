@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { ArrowLeft, Edit2, Globe, MapPin, BatteryCharging, Bell, ChevronRight, Shield, Info, LogOut } from 'lucide-react';
+import { getCurrentRole, clearSession } from '../lib/mockSession';
 
 export const SettingsDutyPreferences: React.FC = () => {
   const navigate = useNavigate();
   const [lang, setLang] = useState<'BN' | 'EN'>('BN');
   const [dutyTracking, setDutyTracking] = useState(true);
   const [batterySaver, setBatterySaver] = useState(false);
+  const role = getCurrentRole();
 
   const toggleLanguage = () => {
     setLang((prev) => (prev === 'BN' ? 'EN' : 'BN'));
@@ -44,15 +46,22 @@ export const SettingsDutyPreferences: React.FC = () => {
             <img
               alt="Profile"
               className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCXvlrPlagz0YnSVeaZp9jm0T7UVWGrXY8izLkLoK1YtgJth88feKwyL90Jh8tHp3OyqSrGHNmMMAaMSkSkMa60LMDEIlnz88L1KLPXeMVUSnMAc07SkFFkAHYx0FFLXRxRFc689aDNVR8PaXSwX4FaQcBrPcZj8uqIg-62rKVP2-J9itamAPd1Ebe6OtcTPApck9fFX1fRl7ekLB2zpxXePxOQv3eEDEB3fa3rWbaF1ajs1WlQCS8HeGYwnOldNUTlAZBXkF5jA"
+              src={role === 'manager' || role === 'admin'
+                ? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                : "https://lh3.googleusercontent.com/aida-public/AB6AXuBCXvlrPlagz0YnSVeaZp9jm0T7UVWGrXY8izLkLoK1YtgJth88feKwyL90Jh8tHp3OyqSrGHNmMMAaMSkSkMa60LMDEIlnz88L1KLPXeMVUSnMAc07SkFFkAHYx0FFLXRxRFc689aDNVR8PaXSwX4FaQcBrPcZj8uqIg-62rKVP2-J9itamAPd1Ebe6OtcTPApck9fFX1fRl7ekLB2zpxXePxOQv3eEDEB3fa3rWbaF1ajs1WlQCS8HeGYwnOldNUTlAZBXkF5jA"
+              }
             />
           </div>
           <div className="flex-grow">
             <h2 className="text-lg font-bold text-[#0b1c30]">
-              {lang === 'BN' ? 'আরিফ রহমান' : 'Arif Rahman'}
+              {role === 'manager' || role === 'admin'
+                ? (lang === 'BN' ? 'ম্যানেজার ইউজার' : 'Manager User')
+                : (lang === 'BN' ? 'আরিফ রহমান' : 'Arif Rahman')}
             </h2>
             <p className="text-xs text-[#44474c] mt-0.5">
-              {lang === 'BN' ? 'ফিল্ড সেলস অফিসার • আইডি: S-4921' : 'Field Sales Officer • ID: S-4921'}
+              {role === 'manager' || role === 'admin'
+                ? (lang === 'BN' ? 'টেরিটরি ম্যানেজার • আইডি: M-8821' : 'Territory Manager • ID: M-8821')
+                : (lang === 'BN' ? 'ফিল্ড সেলস অফিসার • আইডি: S-4921' : 'Field Sales Officer • ID: S-4921')}
             </p>
             <button className="mt-2 text-xs font-semibold text-[#006c49] flex items-center gap-1 hover:underline active:scale-95 transition-all">
               <span>{lang === 'BN' ? 'প্রোফাইল এডিট করুন' : 'Edit Profile'}</span>
@@ -200,7 +209,10 @@ export const SettingsDutyPreferences: React.FC = () => {
         {/* Logout */}
         <div className="pt-2">
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => {
+              clearSession();
+              navigate('/login');
+            }}
             className="w-full bg-white border border-[#ba1a1a] text-[#ba1a1a] rounded-xl py-3 font-semibold flex justify-center items-center gap-2 hover:bg-[#ffdad6]/20 transition-colors active:scale-95"
           >
             <LogOut size={18} />

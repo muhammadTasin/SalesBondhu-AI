@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginRoleSelection } from '../screens/LoginRoleSelection';
 import { DutyTrackingConsent } from '../screens/DutyTrackingConsent';
@@ -15,30 +16,70 @@ import { OfflineSyncStates } from '../screens/OfflineSyncStates';
 import { ManagerDashboard } from '../screens/ManagerDashboard';
 import { ManagerOfficerDetail } from '../screens/ManagerOfficerDetail';
 import { SettingsDutyPreferences } from '../screens/SettingsDutyPreferences';
+import { getCurrentRole } from '../lib/mockSession';
+
+interface RouteGuardProps {
+  element: React.ReactElement;
+  allowedRoles: ('sales_officer' | 'manager' | 'admin')[];
+}
+
+const RouteGuard: React.FC<RouteGuardProps> = ({ element, allowedRoles }) => {
+  const role = getCurrentRole();
+
+  if (!role) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!allowedRoles.includes(role)) {
+    if (role === 'sales_officer') {
+      return <Navigate to="/today" replace />;
+    } else {
+      return <Navigate to="/manager" replace />;
+    }
+  }
+
+  return element;
+};
+
+const RootRedirect = () => {
+  const role = getCurrentRole();
+  if (role === 'sales_officer') {
+    return <Navigate to="/today" replace />;
+  } else if (role === 'manager' || role === 'admin') {
+    return <Navigate to="/manager" replace />;
+  }
+  return <Navigate to="/login" replace />;
+};
 
 export const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/" element={<RootRedirect />} />
       <Route path="/login" element={<LoginRoleSelection />} />
-      <Route path="/duty" element={<DutyTrackingConsent />} />
-      <Route path="/today" element={<TodayDashboard />} />
-      <Route path="/route" element={<OptimizedRoute />} />
-      <Route path="/map" element={<FieldMapIntelligence />} />
-      <Route path="/visit-plan" element={<TodayVisitPlan />} />
-      <Route path="/visit-prep/:dealerId" element={<VisitPreparation />} />
-      <Route path="/active-visit/:visitId" element={<ActiveVisit />} />
-      <Route path="/coach" element={<SalesCoach />} />
-      <Route path="/timeline" element={<TrackingTimeline />} />
-      <Route path="/end-day-report" element={<EndOfDayReport />} />
-      <Route path="/followups" element={<PendingFollowups />} />
-      <Route path="/offline-sync" element={<OfflineSyncStates />} />
-      <Route path="/manager" element={<ManagerDashboard />} />
-      <Route path="/manager/officer/:officerId" element={<ManagerOfficerDetail />} />
-      <Route path="/settings" element={<SettingsDutyPreferences />} />
       
-      {/* Fallback to login */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      {/* Sales Officer Routes */}
+      <Route path="/duty" element={<RouteGuard allowedRoles={['sales_officer']} element={<DutyTrackingConsent />} />} />
+      <Route path="/today" element={<RouteGuard allowedRoles={['sales_officer']} element={<TodayDashboard />} />} />
+      <Route path="/route" element={<RouteGuard allowedRoles={['sales_officer']} element={<OptimizedRoute />} />} />
+      <Route path="/map" element={<RouteGuard allowedRoles={['sales_officer']} element={<FieldMapIntelligence />} />} />
+      <Route path="/visit-plan" element={<RouteGuard allowedRoles={['sales_officer']} element={<TodayVisitPlan />} />} />
+      <Route path="/visit-prep/:dealerId" element={<RouteGuard allowedRoles={['sales_officer']} element={<VisitPreparation />} />} />
+      <Route path="/active-visit/:visitId" element={<RouteGuard allowedRoles={['sales_officer']} element={<ActiveVisit />} />} />
+      <Route path="/coach" element={<RouteGuard allowedRoles={['sales_officer']} element={<SalesCoach />} />} />
+      <Route path="/timeline" element={<RouteGuard allowedRoles={['sales_officer']} element={<TrackingTimeline />} />} />
+      <Route path="/end-day-report" element={<RouteGuard allowedRoles={['sales_officer']} element={<EndOfDayReport />} />} />
+      <Route path="/followups" element={<RouteGuard allowedRoles={['sales_officer']} element={<PendingFollowups />} />} />
+      <Route path="/offline-sync" element={<RouteGuard allowedRoles={['sales_officer']} element={<OfflineSyncStates />} />} />
+      
+      {/* Manager Routes */}
+      <Route path="/manager" element={<RouteGuard allowedRoles={['manager', 'admin']} element={<ManagerDashboard />} />} />
+      <Route path="/manager/officer/:officerId" element={<RouteGuard allowedRoles={['manager', 'admin']} element={<ManagerOfficerDetail />} />} />
+      
+      {/* Shared Shared Routes */}
+      <Route path="/settings" element={<RouteGuard allowedRoles={['sales_officer', 'manager', 'admin']} element={<SettingsDutyPreferences />} />} />
+      
+      {/* Fallback to root redirect */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
-
