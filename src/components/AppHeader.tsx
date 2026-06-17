@@ -1,5 +1,6 @@
 import React from 'react';
 import { RefreshCw, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface AppHeaderProps {
   title?: string;
@@ -18,6 +19,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onLanguageToggle,
   lang = 'BN'
 }) => {
+  const navigate = useNavigate();
+
   return (
     <header className="flex items-center justify-between px-4 pt-6 pb-4 w-full">
       <div>
@@ -47,13 +50,17 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           {lang === 'BN' ? 'বাং | EN' : 'EN | বাং'}
         </button>
         
-        <div className="w-10 h-10 rounded-full overflow-hidden border border-[#c5c6cd] shadow-sm flex-shrink-0 bg-[#eff4ff]">
+        <button
+          onClick={() => navigate('/settings')}
+          aria-label="Open profile settings"
+          className="w-10 h-10 rounded-full overflow-hidden border border-[#c5c6cd] shadow-sm flex-shrink-0 bg-[#eff4ff] active:scale-95 transition-transform"
+        >
           <img
             alt="Arif's Profile"
             className="w-full h-full object-cover"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCXvlrPlagz0YnSVeaZp9jm0T7UVWGrXY8izLkLoK1YtgJth88feKwyL90Jh8tHp3OyqSrGHNmMMAaMSkSkMa60LMDEIlnz88L1KLPXeMVUSnMAc07SkFFkAHYx0FFLXRxRFc689aDNVR8PaXSwX4FaQcBrPcZj8uqIg-62rKVP2-J9itamAPd1Ebe6OtcTPApck9fFX1fRl7ekLB2zpxXePxOQv3eEDEB3fa3rWbaF1ajs1WlQCS8HeGYwnOldNUTlAZBXkF5jA"
           />
-        </div>
+        </button>
       </div>
     </header>
   );

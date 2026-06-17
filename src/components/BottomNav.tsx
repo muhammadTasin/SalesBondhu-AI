@@ -10,16 +10,12 @@ export const BottomNav: React.FC = () => {
     { name: 'হোম', Icon: Home, path: '/today' },
     { name: 'ম্যাপ', Icon: Compass, path: '/map' },
     { name: 'ডিলার', Icon: Store, path: '/visit-plan' },
-    { name: 'কোচ', Icon: Bot, path: '/coach', isComingSoon: true },
-    { name: 'রিপোর্ট', Icon: BarChart3, path: '/end-day-report', isComingSoon: true }
+    { name: 'কোচ', Icon: Bot, path: '/coach' },
+    { name: 'রিপোর্ট', Icon: BarChart3, path: '/end-day-report' }
   ];
 
   const handleTabClick = (tab: typeof tabs[0]) => {
-    if (tab.isComingSoon) {
-      alert(`${tab.name} ফিচারটি পরবর্তী ধাপে যুক্ত করা হবে।`);
-    } else {
-      navigate(tab.path);
-    }
+    navigate(tab.path);
   };
 
   return (
