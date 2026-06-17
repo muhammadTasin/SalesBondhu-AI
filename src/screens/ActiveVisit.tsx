@@ -75,6 +75,14 @@ export const ActiveVisit: React.FC = () => {
   // Input refs for focus shortcuts
   const feedbackRef = useRef<HTMLTextAreaElement>(null);
 
+  // AI Suggestion & Chat states
+  type SuggestionId = 'dues' | 'sales' | 'push' | 'competitor' | null;
+  const [selectedSuggestion, setSelectedSuggestion] = useState<SuggestionId>(null);
+  const [aiChatInput, setAiChatInput] = useState('');
+  const [aiChatResponse, setAiChatResponse] = useState<string | null>(null);
+  const [usedAIScript, setUsedAIScript] = useState<string | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
   // Role Guard Redirect
   const role = getCurrentRole();
   useEffect(() => {
@@ -422,6 +430,86 @@ export const ActiveVisit: React.FC = () => {
     setLang((prev) => (prev === 'BN' ? 'EN' : 'BN'));
   };
 
+  const handleAIFill = () => {
+    if (usedAIScript) {
+      setDealerFeedback(usedAIScript + '\n\nডিলার জানিয়েছেন গত মাসে competitor discount বেশি ছিল, তাই sales কমেছে। Exterior Paint stock নিতে আগ্রহী।');
+    } else {
+      setDealerFeedback('ডিলার জানিয়েছেন গত মাসে competitor discount বেশি ছিল, তাই sales কমেছে। Exterior Paint stock নিতে আগ্রহী।');
+    }
+    setCompetitorInfo('স্থানীয় বাজারে Brand X ৫% extra discount দিচ্ছে।');
+    setComplaintIssue('দ্রুত delivery এবং payment clearance support চেয়েছেন।');
+    setProductInterest('Exterior Paint');
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    setFollowupDate(tomorrow.toISOString().split('T')[0]);
+    showToastMessage(lang === 'BN' ? 'AI সাজেশন দিয়ে রিপোর্ট পূরণ হয়েছে' : 'Form auto-filled with AI suggestions');
+  };
+
+  const suggestionDetails = {
+    dues: {
+      title: 'আগে বকেয়া নিয়ে কথা বলুন',
+      script: 'ভাই, আগের বকেয়াটা ক্লিয়ার করলে আপনার নতুন অর্ডার দ্রুত প্রসেস করতে পারব। কোনো payment issue থাকলে আমাকে জানান।',
+      why: 'Rahman Traders-এর ৳৮৫,০০০ বকেয়া আছে এবং শেষ follow-up ১২ দিন আগে হয়েছে।',
+      trigger: 'ERP dues + last visit history'
+    },
+    sales: {
+      title: 'Sales কমার কারণ জিজ্ঞেস করুন',
+      script: 'গত মাসে আপনার সেলস কিছুটা কমেছে দেখলাম। স্টক শর্টেজ নাকি অন্য কোম্পানির কোনো অফার চলছে বাজারে?',
+      why: 'গত মাসে সেল ৪০% কমেছে।',
+      trigger: 'Sales performance drop'
+    },
+    push: {
+      title: 'Exterior Paint স্টক push করুন',
+      script: 'সামনে বৃষ্টির সিজন, Exterior Paint-এর ভালো ডিমান্ড থাকবে। এখন স্টক করে রাখলে আপনার জন্য সুবিধা হবে।',
+      why: 'Exterior Paint-এ প্রফিট মার্জিন বেশি এবং সিজনাল ডিমান্ড বাড়ছে।',
+      trigger: 'Seasonal trend + Product focus'
+    },
+    competitor: {
+      title: 'Competitor offer আছে কিনা জানুন',
+      script: 'বাজারে অন্য কোম্পানির কেমন অফার চলছে? আমাদের কোনো স্কিম দিলে আপনার সুবিধা হবে কিনা জানান।',
+      why: 'স্থানীয় বাজারে Brand X ৫% extra discount দিচ্ছে বলে খবর আছে।',
+      trigger: 'Market intelligence'
+    }
+  };
+
+  const handleUseSuggestion = (id: SuggestionId) => {
+    if (!id) return;
+    setUsedAIScript(suggestionDetails[id].script);
+    showToastMessage(lang === 'BN' ? 'সাজেশনটি ভিজিট নোটে যুক্ত হয়েছে' : 'Suggestion added to visit notes');
+  };
+
+  const handleAskAI = () => {
+    if (!aiChatInput.trim()) return;
+    const q = aiChatInput.toLowerCase();
+    if (q.includes('payment') || q.includes('বকেয়া')) {
+      setAiChatResponse('নরমভাবে বলুন: ভাই, payment clear হলে আপনার পরের order দ্রুত release করা যাবে। কোনো সমস্যা থাকলে আজ note করে manager-এর সাথে কথা বলব।');
+    } else if (q.includes('sales') || q.includes('সেল')) {
+      setAiChatResponse('জিজ্ঞেস করুন: গত মাসে sales কমার মূল কারণ কী—stock issue, competitor offer, নাকি demand কমেছে?');
+    } else if (q.includes('competitor') || q.includes('অফার')) {
+      setAiChatResponse('Ask for facts only: কোন brand কী offer দিচ্ছে, কত discount, কোন product বেশি চলছে—এগুলো note করুন।');
+    } else {
+      setAiChatResponse('AI: ডিলারের সাথে সম্পর্ক ভালো রাখতে আগে তার সুবিধা-অসুবিধা শুনুন। এরপর আপনার কোম্পানির বেনিফিটগুলো বুঝিয়ে বলুন।');
+    }
+    showToastMessage(lang === 'BN' ? 'AI উত্তর তৈরি করেছে' : 'AI generated response');
+  };
+
+  const handleSpeech = (text: string) => {
+    if ('speechSynthesis' in window) {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'bn-BD';
+      utterance.onend = () => setIsSpeaking(false);
+      setIsSpeaking(true);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      showToastMessage(lang === 'BN' ? 'এই ডিভাইসে voice support নেই' : 'Voice support unavailable on this device');
+    }
+  };
+
   // Submit Visit report
   const completeVisit = async (completedWithoutData: boolean) => {
     const missingFields: string[] = [];
@@ -660,7 +748,7 @@ export const ActiveVisit: React.FC = () => {
           </header>
 
           {/* Scrollable Content */}
-          <main className="flex-grow overflow-y-auto px-4 pb-24 mt-3 space-y-5 scrollbar-hide">
+          <main className="flex-grow overflow-y-auto px-4 pb-20 mt-3 space-y-5 scrollbar-hide">
             {/* Dealer Context */}
             <section className="bg-white rounded-2xl p-4 border border-[#e5eeff]/50 shadow-sm">
               <div className="flex justify-between items-start">
@@ -860,6 +948,168 @@ export const ActiveVisit: React.FC = () => {
               </div>
             </section>
 
+            {/* AI Co-pilot Suggestions */}
+            <section className="bg-gradient-to-br from-[#eff4ff] to-[#e5eeff] rounded-2xl p-4 border border-[#c5c6cd]/30 shadow-sm text-left transition-all">
+              <h3 className="text-xs font-bold text-[#0b1c30] uppercase tracking-wider flex items-center gap-1.5 mb-3">
+                <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text flex items-center gap-1">
+                  <BookOpen size={14} className="text-blue-600" />
+                  <span>{lang === 'BN' ? 'AI কো-পাইলট সাজেশন' : 'AI Co-pilot Suggestion'}</span>
+                </div>
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { id: 'dues', textBn: 'আগে বকেয়া নিয়ে কথা বলুন', textEn: 'Prioritize due collection' },
+                  { id: 'sales', textBn: 'Sales কমার কারণ জিজ্ঞেস করুন', textEn: 'Ask about sales drop' },
+                  { id: 'push', textBn: 'Exterior Paint স্টক push করুন', textEn: 'Push Exterior Paint stock' },
+                  { id: 'competitor', textBn: 'Competitor offer আছে কিনা জানুন', textEn: 'Check competitor offers' }
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setSelectedSuggestion(selectedSuggestion === item.id ? null : item.id as SuggestionId)}
+                    className={`p-2.5 rounded-lg border shadow-sm flex items-start gap-2 text-left transition-all outline-none ${
+                      selectedSuggestion === item.id 
+                        ? 'bg-blue-50 border-blue-300 ring-1 ring-blue-300' 
+                        : 'bg-white/80 border-white hover:bg-white'
+                    }`}
+                  >
+                    <div className={`w-1.5 h-1.5 rounded-full mt-1 shrink-0 ${
+                      selectedSuggestion === item.id ? 'bg-blue-600' : 'bg-blue-500'
+                    }`}></div>
+                    <span className={`text-[10px] font-bold leading-tight ${
+                      selectedSuggestion === item.id ? 'text-blue-900' : 'text-[#0b1c30]'
+                    }`}>
+                      {lang === 'BN' ? item.textBn : item.textEn}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Selected Suggestion Detail Card */}
+              {selectedSuggestion && (
+                <div className="mt-3 bg-white rounded-xl p-3 border border-blue-100 shadow-sm animate-fade-in">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="text-[11px] font-extrabold text-blue-900">{suggestionDetails[selectedSuggestion].title}</h4>
+                    <button onClick={() => handleSpeech(suggestionDetails[selectedSuggestion].script)} className="text-blue-600 bg-blue-50 p-1.5 rounded-full hover:bg-blue-100 transition-colors">
+                      <MessageCircle size={12} className={isSpeaking ? 'animate-pulse' : ''} />
+                    </button>
+                  </div>
+                  <div className="bg-blue-50/50 rounded-lg p-2.5 mb-2.5 border border-blue-50">
+                    <p className="text-[11px] text-[#0b1c30] font-semibold italic">"{suggestionDetails[selectedSuggestion].script}"</p>
+                  </div>
+                  <div className="space-y-1.5 mb-3">
+                    <div className="flex gap-2 items-start">
+                      <span className="text-[9px] font-bold text-[#75777d] uppercase shrink-0 mt-0.5 w-10">Why:</span>
+                      <p className="text-[10px] text-[#44474c] font-medium leading-tight">{suggestionDetails[selectedSuggestion].why}</p>
+                    </div>
+                    <div className="flex gap-2 items-start">
+                      <span className="text-[9px] font-bold text-[#75777d] uppercase shrink-0 mt-0.5 w-10">Data:</span>
+                      <p className="text-[9px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono inline-block">{suggestionDetails[selectedSuggestion].trigger}</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => handleUseSuggestion(selectedSuggestion)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-[10px] font-bold transition-all active:scale-95 flex justify-center items-center gap-1.5"
+                  >
+                    <Check size={12} />
+                    {lang === 'BN' ? 'এই কথাটি ব্যবহার করুন' : 'Use this script'}
+                  </button>
+                </div>
+              )}
+
+              {/* AI Chat Box */}
+              <div className="mt-4 pt-3 border-t border-[#c5c6cd]/30">
+                <h4 className="text-[10px] font-bold text-[#44474c] mb-2">{lang === 'BN' ? 'AI-কে জিজ্ঞেস করুন' : 'Ask AI'}</h4>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={aiChatInput}
+                    onChange={(e) => setAiChatInput(e.target.value)}
+                    placeholder={lang === 'BN' ? 'যেমন: payment নিয়ে কীভাবে কথা বলব?' : 'e.g. How to ask for payment?'}
+                    className="flex-1 bg-white border border-[#c5c6cd]/50 rounded-lg px-2.5 py-1.5 text-[10px] outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all placeholder-gray-400"
+                  />
+                  <button 
+                    onClick={handleAskAI}
+                    className="bg-[#0e1c2f] text-white px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-[#1a2c47] active:scale-95 transition-all"
+                  >
+                    {lang === 'BN' ? 'জিজ্ঞেস করুন' : 'Ask'}
+                  </button>
+                </div>
+                {aiChatResponse && (
+                  <div className="mt-2 bg-white rounded-lg p-2.5 border border-blue-100 shadow-sm flex items-start gap-2 animate-fade-in relative">
+                    <div className="w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                      <BookOpen size={8} className="text-blue-600" />
+                    </div>
+                    <div className="flex-1 pr-6">
+                      <p className="text-[10px] text-[#0b1c30] font-medium leading-relaxed">{aiChatResponse}</p>
+                    </div>
+                    <div className="absolute top-2 right-2 flex flex-col gap-1">
+                       <button onClick={() => handleSpeech(aiChatResponse)} className="text-gray-400 hover:text-blue-600">
+                         <MessageCircle size={10} />
+                       </button>
+                       <button onClick={() => {
+                          navigator.clipboard.writeText(aiChatResponse);
+                          showToastMessage(lang === 'BN' ? 'কপি করা হয়েছে' : 'Copied');
+                       }} className="text-gray-400 hover:text-blue-600">
+                         <BookOpen size={10} />
+                       </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Quick Actions */}
+            <section className="pb-2">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleQuickAction('call')}
+                  className="flex-1 min-w-[80px] bg-white border border-[#c5c6cd]/30 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
+                >
+                  <div className="bg-[#eff4ff] p-2 rounded-full text-[#0b1c30] shrink-0">
+                    <Phone size={14} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[#0b1c30] text-center leading-tight truncate w-full">{lang === 'BN' ? 'কল করুন' : 'Call'}</span>
+                </button>
+                <button
+                  onClick={() => handleQuickAction('whatsapp')}
+                  className="flex-1 min-w-[80px] bg-white border border-[#c5c6cd]/30 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
+                >
+                  <div className="bg-[#e8f5e9] p-2 rounded-full text-[#2e7d32] shrink-0">
+                    <MessageCircle size={14} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[#0b1c30] text-center leading-tight truncate w-full">WhatsApp</span>
+                </button>
+                <button
+                  onClick={() => handleQuickAction('photo')}
+                  className="flex-1 min-w-[80px] bg-white border border-[#c5c6cd]/30 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
+                >
+                  <div className="bg-[#fff3e0] p-2 rounded-full text-[#e65100] shrink-0">
+                    <Camera size={14} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[#0b1c30] text-center leading-tight truncate w-full">{lang === 'BN' ? 'ছবি তুলুন' : 'Camera'}</span>
+                </button>
+                <button
+                  onClick={() => handleQuickAction('note')}
+                  className="flex-1 min-w-[80px] bg-white border border-[#c5c6cd]/30 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
+                >
+                  <div className="bg-[#f3e5f5] p-2 rounded-full text-[#7b1fa2] shrink-0">
+                    <Edit size={14} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[#0b1c30] text-center leading-tight truncate w-full">{lang === 'BN' ? 'নোট লিখুন' : 'Notes'}</span>
+                </button>
+                <button
+                  onClick={() => handleQuickAction('manager')}
+                  className="flex-1 min-w-[80px] bg-white border border-[#c5c6cd]/30 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
+                >
+                  <div className="bg-[#ffebee] p-2 rounded-full text-[#c62828] shrink-0">
+                    <AlertTriangle size={14} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[#0b1c30] text-center leading-tight truncate w-full">{lang === 'BN' ? 'ম্যানেজার' : 'Manager'}</span>
+                </button>
+              </div>
+            </section>
+
             {/* Talking Points script */}
             <section className="bg-[#0e1c2f] text-white rounded-2xl p-4 relative overflow-hidden border border-white/5 text-left">
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#9df4c8]/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -906,60 +1156,40 @@ export const ActiveVisit: React.FC = () => {
               </div>
             </section>
 
-            {/* Quick Actions Scroll bar */}
-            <section className="space-y-2">
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-                <button
-                  onClick={() => handleQuickAction('call')}
-                  className="bg-white border border-[#c5c6cd]/30 rounded-xl p-3 flex flex-col items-center justify-center min-w-[80px] gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
-                >
-                  <div className="bg-[#eff4ff] p-2 rounded-full text-[#0b1c30] shrink-0">
-                    <Phone size={14} />
-                  </div>
-                  <span className="text-[10px] font-bold text-[#0b1c30]">{lang === 'BN' ? 'কল করুন' : 'Call'}</span>
-                </button>
-                <button
-                  onClick={() => handleQuickAction('whatsapp')}
-                  className="bg-white border border-[#c5c6cd]/30 rounded-xl p-3 flex flex-col items-center justify-center min-w-[80px] gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
-                >
-                  <div className="bg-[#eff4ff] p-2 rounded-full text-[#0c714d] shrink-0">
-                    <MessageCircle size={14} />
-                  </div>
-                  <span className="text-[10px] font-bold text-[#0b1c30]">WhatsApp</span>
-                </button>
-                <button
-                  onClick={() => handleQuickAction('photo')}
-                  className="bg-white border border-[#c5c6cd]/30 rounded-xl p-3 flex flex-col items-center justify-center min-w-[80px] gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
-                >
-                  <div className="bg-[#eff4ff] p-2 rounded-full text-[#0b1c30] shrink-0">
-                    <Camera size={14} />
-                  </div>
-                  <span className="text-[10px] font-bold text-[#0b1c30]">{lang === 'BN' ? 'ছবি তুলুন' : 'Camera'}</span>
-                </button>
-                <button
-                  onClick={() => handleQuickAction('note')}
-                  className="bg-white border border-[#c5c6cd]/30 rounded-xl p-3 flex flex-col items-center justify-center min-w-[80px] gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
-                >
-                  <div className="bg-[#eff4ff] p-2 rounded-full text-[#0b1c30] shrink-0">
-                    <Edit size={14} />
-                  </div>
-                  <span className="text-[10px] font-bold text-[#0b1c30]">{lang === 'BN' ? 'নোট লিখুন' : 'Notes'}</span>
-                </button>
-                <button
-                  onClick={() => handleQuickAction('manager')}
-                  className="bg-white border border-[#c5c6cd]/30 rounded-xl p-3 flex flex-col items-center justify-center min-w-[80px] gap-1.5 shadow-sm hover:bg-[#eff4ff]/30 active:scale-95 transition-all outline-none"
-                >
-                  <div className="bg-[#eff4ff] p-2 rounded-full text-[#ba1a1a] shrink-0">
-                    <AlertTriangle size={14} />
-                  </div>
-                  <span className="text-[10px] font-bold text-[#0b1c30]">{lang === 'BN' ? 'ম্যানেজার' : 'Manager'}</span>
-                </button>
-              </div>
+            {/* Warnings / What not to do */}
+            <section className="space-y-2.5">
+              <h3 className="text-xs font-bold text-[#ba1a1a] px-1 uppercase tracking-wider flex items-center gap-1">
+                <AlertTriangle size={14} />
+                <span>{lang === 'BN' ? 'কী করবেন না' : 'What Not To Do'}</span>
+              </h3>
+              
+              <ul className="bg-[#ffdad6]/30 border border-[#ba1a1a]/20 rounded-2xl p-4 space-y-2.5 text-left">
+                <li className="flex items-start gap-2">
+                  <X size={14} className="text-[#ba1a1a] shrink-0 mt-0.5" />
+                  <span className="text-[11px] font-bold text-[#93000a] leading-tight">
+                    {lang === 'BN' ? 'সরাসরি payment pressure দেবেন না' : 'Do not pressure directly for payments'}
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <X size={14} className="text-[#ba1a1a] shrink-0 mt-0.5" />
+                  <span className="text-[11px] font-bold text-[#93000a] leading-tight">
+                    {lang === 'BN' ? 'competitor নিয়ে aggressive কথা বলবেন না' : 'Do not speak aggressively about competitors'}
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <X size={14} className="text-[#ba1a1a] shrink-0 mt-0.5" />
+                  <span className="text-[11px] font-bold text-[#93000a] leading-tight">
+                    {lang === 'BN' ? 'order promise করার আগে stock check করুন' : 'Check stock before promising delivery dates'}
+                  </span>
+                </li>
+              </ul>
             </section>
+
+
           </main>
 
           {/* Sticky Bottom Action Bar */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#c5c6cd]/25 p-4 shadow-[0px_-4px_25px_rgba(0,0,0,0.06)] flex gap-3">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-white border-t border-[#c5c6cd]/25 p-4 shadow-[0px_-4px_25px_rgba(0,0,0,0.06)] flex gap-3">
             <button 
               onClick={() => navigate(`/visit-prep/${dealer.id}`)}
               className="flex-1 bg-white border border-[#c5c6cd] text-[#44474c] rounded-full py-3 px-4 text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-[#eff4ff] active:scale-95 transition-all outline-none"
@@ -998,7 +1228,7 @@ export const ActiveVisit: React.FC = () => {
           </header>
 
           {/* Form Content */}
-          <main className="flex-grow overflow-y-auto px-4 pb-28 pt-4 space-y-6 text-left scrollbar-hide">
+          <main className="flex-grow overflow-y-auto px-4 pb-32 pt-4 space-y-6 text-left scrollbar-hide">
             
             {/* Top Bento Summary Card */}
             <section className="bg-white rounded-2xl shadow-sm border border-[#e5eeff]/60 p-4 relative overflow-hidden">
@@ -1032,13 +1262,44 @@ export const ActiveVisit: React.FC = () => {
               </div>
             </section>
 
+            {/* AI Report Assistant */}
+            <section className="bg-gradient-to-br from-[#eff4ff] to-[#e5eeff] rounded-2xl p-4 border border-[#c5c6cd]/30 shadow-sm text-left">
+              <h3 className="text-xs font-bold text-[#0b1c30] uppercase tracking-wider flex items-center gap-1.5 mb-2">
+                <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text flex items-center gap-1">
+                  <BookOpen size={14} className="text-blue-600" />
+                  <span>{lang === 'BN' ? 'AI রিপোর্ট সহায়তা' : 'AI Report Assistant'}</span>
+                </div>
+              </h3>
+              <p className="text-[10px] font-medium text-[#44474c] mb-3">
+                {lang === 'BN' ? 'আপনার ভিজিট ডেটা দেখে রিপোর্ট সাজেস্ট করা হয়েছে।' : 'A report has been suggested based on your visit data.'}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={handleAIFill}
+                  className="flex-1 bg-[#0e1c2f] text-white py-2 rounded-xl text-[10px] font-bold hover:opacity-90 transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm outline-none"
+                >
+                  <Edit size={12} />
+                  {lang === 'BN' ? 'AI দিয়ে রিপোর্ট পূরণ' : 'Auto-fill with AI'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => showToastMessage(lang === 'BN' ? 'কপি করা হয়েছে' : 'Copied to clipboard')}
+                  className="flex-1 bg-white border border-[#c5c6cd] text-[#0b1c30] py-2 rounded-xl text-[10px] font-bold hover:bg-[#eff4ff] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm outline-none"
+                >
+                  <BookOpen size={12} />
+                  {lang === 'BN' ? 'সাজেশন কপি করুন' : 'Copy Suggestion'}
+                </button>
+              </div>
+            </section>
+
             <form onSubmit={handleSubmitReport} className="space-y-5">
               
               {/* Photo Upload Box */}
               <div className="space-y-2">
                 <label className="text-[11px] font-bold text-[#44474c] uppercase tracking-wide flex items-center gap-1.5">
                   <Camera size={14} className="text-[#75777d]" />
-                  <span>{lang === 'BN' ? 'ভিজিট প্রমাণ ফটো (বাধ্যতামূলক)' : 'Photo Proof (Mandatory)'}</span>
+                  <span>{lang === 'BN' ? 'ভিজিট প্রমাণের ছবি প্রয়োজন' : 'Photo proof required'}</span>
                 </label>
                 
                 {photoAdded && photoUrl ? (
@@ -1153,9 +1414,8 @@ export const ActiveVisit: React.FC = () => {
                     ref={feedbackRef}
                     value={dealerFeedback}
                     onChange={(e) => setDealerFeedback(e.target.value)}
-                    rows={3}
-                    className="w-full bg-white border border-[#c5c6cd] rounded-xl px-3 py-3 text-xs text-[#0b1c30] font-medium focus:ring-1 focus:ring-[#006c49] focus:border-[#006c49] outline-none transition-all placeholder-[#75777d]/50 resize-none shadow-sm"
-                    placeholder={lang === 'BN' ? 'ডিলার বা পেমেন্ট সম্পর্কিত মন্তব্য লিখুন...' : 'Enter details or feedback notes...'}
+                    className="w-full bg-white border border-[#c5c6cd] rounded-xl px-3 py-3 text-xs text-[#0b1c30] font-medium focus:ring-1 focus:ring-[#006c49] focus:border-[#006c49] outline-none transition-all placeholder-[#75777d]/50 resize-none shadow-sm min-h-[90px]"
+                    placeholder={lang === 'BN' ? 'ডিলার বা payment সম্পর্কে মন্তব্য লিখুন...' : 'Enter details or feedback notes...'}
                   />
                 </div>
 
@@ -1165,9 +1425,8 @@ export const ActiveVisit: React.FC = () => {
                   <textarea 
                     value={competitorInfo}
                     onChange={(e) => setCompetitorInfo(e.target.value)}
-                    rows={2}
-                    className="w-full bg-white border border-[#c5c6cd] rounded-xl px-3 py-3 text-xs text-[#0b1c30] font-medium focus:ring-1 focus:ring-[#006c49] focus:border-[#006c49] outline-none transition-all placeholder-[#75777d]/50 resize-none shadow-sm"
-                    placeholder={lang === 'BN' ? 'প্রতিযোগীদের কোনো ডিসকাউন্ট বা প্রমোশন দেখেছেন?' : 'Observe any competitor activity or display banners?'}
+                    className="w-full bg-white border border-[#c5c6cd] rounded-xl px-3 py-3 text-xs text-[#0b1c30] font-medium focus:ring-1 focus:ring-[#006c49] focus:border-[#006c49] outline-none transition-all placeholder-[#75777d]/50 resize-none shadow-sm min-h-[90px]"
+                    placeholder={lang === 'BN' ? 'প্রতিযোগীর অফার বা stock সম্পর্কে লিখুন...' : 'Observe any competitor activity or display banners?'}
                   />
                 </div>
 
@@ -1177,8 +1436,7 @@ export const ActiveVisit: React.FC = () => {
                   <textarea 
                     value={complaintIssue}
                     onChange={(e) => setComplaintIssue(e.target.value)}
-                    rows={2}
-                    className="w-full bg-white border border-[#c5c6cd] rounded-xl px-3 py-3 text-xs text-[#0b1c30] font-medium focus:ring-1 focus:ring-[#006c49] focus:border-[#006c49] outline-none transition-all placeholder-[#75777d]/50 resize-none shadow-sm"
+                    className="w-full bg-white border border-[#c5c6cd] rounded-xl px-3 py-3 text-xs text-[#0b1c30] font-medium focus:ring-1 focus:ring-[#006c49] focus:border-[#006c49] outline-none transition-all placeholder-[#75777d]/50 resize-none shadow-sm min-h-[90px]"
                     placeholder={lang === 'BN' ? 'ডিলারের কোনো অভিযোগ বা সমস্যা থাকলে লিখুন...' : 'Enter any delivery or product quality complaints...'}
                   />
                 </div>
@@ -1241,7 +1499,7 @@ export const ActiveVisit: React.FC = () => {
               </section>
 
               {/* Fixed Bottom Submission Area */}
-              <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-md border-t border-[#c5c6cd]/30 z-40 shadow-[0px_-4px_25px_rgba(0,0,0,0.03)]">
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-4 bg-white/95 backdrop-blur-md border-t border-[#c5c6cd]/30 z-40 shadow-[0px_-4px_25px_rgba(0,0,0,0.03)] pb-8">
                 <button
                   type="submit"
                   className="w-full bg-[#006c49] hover:bg-[#0c714d] text-white rounded-full py-4 px-6 font-bold text-xs tracking-wide active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-[#006c49]/20"
@@ -1257,7 +1515,7 @@ export const ActiveVisit: React.FC = () => {
 
       {/* Floating Toast Notification */}
       {toast.visible && (
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-50 bg-[#0e1c2f]/95 text-white px-4 py-2.5 rounded-xl shadow-lg border border-[#c5c6cd]/25 text-[10px] font-semibold transition-all duration-300 w-[90%] text-center backdrop-blur-sm animate-fade-in-up">
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-[100] bg-[#0b1c30]/95 text-white px-4 py-3 rounded-xl shadow-xl border border-white/10 text-[11px] font-semibold transition-all duration-300 w-[90%] text-center backdrop-blur-md animate-fade-in">
           {toast.message}
         </div>
       )}

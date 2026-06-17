@@ -544,7 +544,7 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* Floating Toast Notification */}
       {toast.visible && (
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-50 bg-[#0e1c2f]/95 text-white px-4 py-2.5 rounded-xl shadow-lg border border-[#c5c6cd]/25 text-[10px] font-semibold transition-all duration-300 w-[90%] text-center backdrop-blur-sm animate-fade-in-up">
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-[100] bg-[#0b1c30]/95 text-white px-4 py-3 rounded-xl shadow-xl border border-white/10 text-[11px] font-semibold transition-all duration-300 w-[90%] text-center backdrop-blur-md animate-fade-in">
           {toast.message}
         </div>
       )}

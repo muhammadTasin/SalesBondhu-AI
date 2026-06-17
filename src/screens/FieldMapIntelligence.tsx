@@ -9,11 +9,11 @@ import {
   Store, 
   Plus, 
   Minus, 
-  Navigation, 
-  Locate, 
+  Locate,
   ChevronRight, 
   Compass, 
-  ArrowLeft 
+  ArrowLeft,
+  Navigation
 } from 'lucide-react';
 
 export const FieldMapIntelligence: React.FC = () => {
@@ -317,7 +317,7 @@ export const FieldMapIntelligence: React.FC = () => {
         {/* Top Search Area */}
         <div 
           onClick={(e) => e.stopPropagation()}
-          className="relative z-30 pt-4 px-4 w-full flex items-center justify-between gap-3"
+          className="relative z-[60] pt-4 px-4 w-full flex items-center justify-between gap-3"
         >
           {/* Back Button for context */}
           <button 
@@ -350,7 +350,7 @@ export const FieldMapIntelligence: React.FC = () => {
         {/* Range Selector Controls */}
         <div 
           onClick={(e) => e.stopPropagation()}
-          className="absolute top-24 right-4 z-30 bg-white/95 backdrop-blur-sm rounded-lg shadow-md border border-[#c5c6cd]/30 flex flex-col overflow-hidden"
+          className="absolute top-24 right-4 z-[60] bg-white/95 backdrop-blur-sm rounded-lg shadow-md border border-[#c5c6cd]/30 flex flex-col overflow-hidden"
         >
           <button
             onClick={() => handleRangeChipClick('500m')}
@@ -381,7 +381,7 @@ export const FieldMapIntelligence: React.FC = () => {
         {/* Floating Manual Zoom Controls */}
         <div 
           onClick={(e) => e.stopPropagation()}
-          className="absolute top-44 right-4 z-30 flex flex-col gap-2"
+          className="absolute top-44 right-4 z-[60] flex flex-col gap-2"
         >
           <button
             onClick={handleZoomIn}
@@ -437,85 +437,112 @@ export const FieldMapIntelligence: React.FC = () => {
           </div>
         )}
 
-        {/* Floating Smart Summary Card */}
-        {selectedDealer && selectedDealerData && (
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            className="absolute bottom-[200px] left-4 right-4 z-40 bg-white rounded-2xl shadow-xl border border-[#c5c6cd]/30 overflow-hidden animate-fade-in"
-          >
-            <div className={`px-4 py-2 flex justify-between items-center ${
-              selectedDealerData.priorityLevel === 'urgent' ? 'bg-[#ffdad6] text-[#93000a]' :
-              selectedDealerData.priorityLevel === 'warning' ? 'bg-[#ffe082]/30 text-[#e65100]' :
-              selectedDealerData.priorityLevel === 'normal' ? 'bg-[#9af2c5]/30 text-[#0c714d]' :
-              selectedDealerData.priorityLevel === 'lead' ? 'bg-[#d6e3fe] text-[#0e1c2f]' :
-              'bg-[#008080]/15 text-[#008080]'
-            }`}>
-              <span className="text-[10px] font-bold uppercase tracking-wider">
-                {lang === 'BN' ? selectedDealerData.priorityTextBn : selectedDealerData.priorityTextEn}
-              </span>
-              <span className="text-[9px] font-semibold flex items-center">
-                <Navigation size={12} className="mr-0.5 shrink-0" />
-                {lang === 'BN' ? `${selectedDealerData.distance} কিমি` : `${selectedDealerData.distance} km`}
-              </span>
-            </div>
-            
-            <div className="p-4 space-y-3.5">
-              <div>
-                <h3 className="text-sm font-bold text-[#0b1c30]">
+        {/* Floating Smart Summary Card (Compact Prompt) */}
+        {selectedDealer && selectedDealerData && (() => {
+          const topNum = parseFloat(selectedDealerData.top);
+          const leftNum = parseFloat(selectedDealerData.left);
+          
+          let positionStyle: React.CSSProperties = {
+            position: 'absolute',
+            zIndex: 50,
+            width: '240px',
+            top: selectedDealerData.top,
+            left: selectedDealerData.left,
+          };
+      
+          // Determine vertical position: above or below marker
+          if (topNum > 50) {
+            positionStyle.transform = 'translate(-50%, calc(-100% - 24px))';
+          } else {
+            positionStyle.transform = 'translate(-50%, 24px)';
+          }
+      
+          // Determine horizontal clamping
+          if (leftNum < 35) {
+            positionStyle.transform = topNum > 50 
+              ? 'translate(-20%, calc(-100% - 24px))'
+              : 'translate(-20%, 24px)';
+          } else if (leftNum > 65) {
+            positionStyle.transform = topNum > 50 
+              ? 'translate(-80%, calc(-100% - 24px))'
+              : 'translate(-80%, 24px)';
+          }
+
+          return (
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              style={positionStyle}
+              className="bg-white rounded-2xl shadow-xl border border-[#c5c6cd]/40 overflow-hidden animate-fade-in flex flex-col"
+            >
+              {/* Header */}
+              <div className={`px-3 py-2 flex justify-between items-center ${
+                selectedDealerData.priorityLevel === 'urgent' ? 'bg-[#ffdad6]' :
+                selectedDealerData.priorityLevel === 'warning' ? 'bg-[#ffe082]/40' :
+                selectedDealerData.priorityLevel === 'normal' ? 'bg-[#9af2c5]/40' :
+                'bg-[#d6e3fe]'
+              }`}>
+                <span className={`text-[11px] font-extrabold ${
+                  selectedDealerData.priorityLevel === 'urgent' ? 'text-[#93000a]' :
+                  selectedDealerData.priorityLevel === 'warning' ? 'text-[#e65100]' :
+                  selectedDealerData.priorityLevel === 'normal' ? 'text-[#0c714d]' :
+                  'text-[#0e1c2f]'
+                }`}>
+                  {lang === 'BN' ? selectedDealerData.priorityTextBn : selectedDealerData.priorityTextEn}
+                </span>
+                <span className="text-[10px] font-semibold text-[#44474c] flex items-center gap-1">
+                  <Navigation size={10} className="transform rotate-45" />
+                  {lang === 'BN' ? `${selectedDealerData.distance} কিমি দূরে` : `${selectedDealerData.distance} km away`}
+                </span>
+              </div>
+              
+              {/* Body */}
+              <div className="p-3">
+                <h3 className="text-sm font-bold text-[#0b1c30] mb-3">
                   {lang === 'BN' ? selectedDealerData.nameBn : selectedDealerData.name}
                 </h3>
-                <p className="text-[9px] text-[#75777d] mt-0.5">
-                  {lang === 'BN' ? `এলাকা: ${selectedDealerData.areaBn}` : `Area: ${selectedDealerData.area}`}
-                </p>
-              </div>
-              
-              <div className="space-y-1.5 text-[11px] border-y border-[#eff4ff] py-2.5">
-                <div className="flex justify-between">
-                  <span className="text-[#75777d]">{lang === 'BN' ? 'कारण:' : 'Reason:'}</span>
-                  <span className="font-bold text-[#0b1c30] text-right">
-                    {lang === 'BN' ? selectedDealerData.reasonBn : selectedDealerData.reasonEn}
-                  </span>
+                
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center text-[11px]">
+                    <span className="text-[#44474c]">{lang === 'BN' ? 'বকেয়া:' : 'Dues:'}</span>
+                    <span className={`font-bold ${selectedDealerData.dues !== '৳০' ? 'text-[#ba1a1a]' : 'text-[#0c714d]'}`}>
+                      {selectedDealerData.dues}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-[11px]">
+                    <span className="text-[#44474c]">{lang === 'BN' ? 'সেল:' : 'Sales:'}</span>
+                    <span className={`font-bold ${selectedDealerData.sales.includes('কমেছে') || selectedDealerData.sales.includes('drop') ? 'text-[#ba1a1a]' : 'text-[#44474c]'}`}>
+                      {selectedDealerData.sales}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-[11px]">
+                    <span className="text-[#44474c]">{lang === 'BN' ? 'শেষ ভিজিট:' : 'Last Visit:'}</span>
+                    <span className="font-semibold text-[#44474c]">
+                      {selectedDealerData.lastVisit}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#75777d]">{lang === 'BN' ? 'পরামর্শ:' : 'Action:'}</span>
-                  <span className="font-bold text-[#006c49] text-right">
-                    {lang === 'BN' ? selectedDealerData.actionBn : selectedDealerData.actionEn}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="flex gap-2">
+                
                 <button
-                  onClick={() => navigate(`/visit-prep/${selectedDealerData.dealerId}`)}
-                  className="flex-1 bg-[#006c49] text-white py-2 rounded-xl text-xs font-bold hover:bg-[#0c714d] transition-colors flex items-center justify-center gap-1 active:scale-95 outline-none"
-                >
-                  <Store size={14} className="shrink-0" />
-                  {lang === 'BN' ? 'ভিজিট করুন' : 'Visit'}
-                </button>
-                <button
-                  onClick={() => setRouteVisible(true)}
-                  className={`flex-1 py-2 rounded-xl border text-xs font-bold flex items-center justify-center gap-1 active:scale-95 transition-colors outline-none ${
-                    routeVisible 
-                      ? 'bg-[#1976D2] text-white border-transparent' 
-                      : 'bg-white border-[#c5c6cd] text-[#44474c] hover:bg-[#eff4ff]'
+                  onClick={() => navigate(`/visit-prep/${selectedDealerData.id}`)}
+                  className={`w-full text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-95 transition-all outline-none ${
+                    selectedDealerData.priorityLevel === 'urgent' || selectedDealerData.priorityLevel === 'warning'
+                      ? 'bg-[#ba1a1a] hover:bg-[#93000a]'
+                      : 'bg-[#006c49] hover:bg-[#0c714d]'
                   }`}
                 >
-                  <Navigation size={14} className="shrink-0" />
-                  {lang === 'BN' ? 'রুট দেখুন' : 'Show Route'}
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedDealer(null);
-                    setRouteVisible(false);
-                  }}
-                  className="px-3 bg-white border border-[#c5c6cd] text-[#44474c] py-2 rounded-xl text-xs font-bold hover:bg-[#eff4ff] active:scale-95 outline-none"
-                >
-                  {lang === 'BN' ? 'পরে' : 'Later'}
+                  {selectedDealerData.priorityLevel === 'urgent' || selectedDealerData.priorityLevel === 'warning' ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/><path d="M10 11h2l2-4"/><path d="M10 11v6l2 4"/><path d="M14 16l-2-5"/></svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  )}
+                  {lang === 'BN' 
+                    ? (selectedDealerData.priorityLevel === 'urgent' || selectedDealerData.priorityLevel === 'warning' ? 'আগে ভিজিট করুন' : 'ভিজিট করুন') 
+                    : (selectedDealerData.priorityLevel === 'urgent' || selectedDealerData.priorityLevel === 'warning' ? 'Visit First' : 'Visit')}
                 </button>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* Recenter / Action Button & Pull-up bottom sheet */}
@@ -558,22 +585,23 @@ export const FieldMapIntelligence: React.FC = () => {
             </div>
 
             {/* Horizontal scroll list */}
-            <div className="flex overflow-x-auto space-x-3 pb-1 -mx-4 px-4 scrollbar-hide">
+            <div className="flex overflow-x-auto space-x-3 pb-4 pt-1 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {filteredDealers.map((dealer) => (
-                <DealerCard
-                  key={dealer.id}
-                  name={lang === 'BN' ? dealer.nameBn : dealer.name}
-                  distance={lang === 'BN' ? `${dealer.distance} কি.মি. দূরে` : `${dealer.distance} km away`}
-                  priorityLevel={dealer.priorityLevel as any}
-                  priorityText={lang === 'BN' ? dealer.priorityTextBn : dealer.priorityTextEn}
-                  actionText={lang === 'BN' ? 'ভিজিট করুন →' : 'Visit →'}
-                  isActive={selectedDealer === dealer.id}
-                  onCardClick={() => {
-                    setSelectedDealer(dealer.id);
-                    setRouteVisible(false); // Reset route line on card click selection
-                  }}
-                  onActionClick={() => navigate(`/visit-prep/${dealer.dealerId}`)}
-                />
+                <div key={dealer.id} className="snap-start shrink-0">
+                  <DealerCard
+                    name={lang === 'BN' ? dealer.nameBn : dealer.name}
+                    distance={lang === 'BN' ? `${dealer.distance} কি.মি. দূরে` : `${dealer.distance} km away`}
+                    priorityLevel={dealer.priorityLevel as any}
+                    priorityText={lang === 'BN' ? dealer.priorityTextBn : dealer.priorityTextEn}
+                    actionText={lang === 'BN' ? 'ভিজিট করুন →' : 'Visit →'}
+                    isActive={selectedDealer === dealer.id}
+                    onCardClick={() => {
+                      setSelectedDealer(dealer.id);
+                      setRouteVisible(false); // Reset route line on card click selection
+                    }}
+                    onActionClick={() => navigate(`/visit-prep/${dealer.id}`)}
+                  />
+                </div>
               ))}
               {filteredDealers.length === 0 && (
                 <div className="text-xs text-[#75777d] py-8 px-4 text-center w-full">

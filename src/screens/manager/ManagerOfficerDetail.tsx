@@ -85,7 +85,7 @@ export const ManagerOfficerDetail: React.FC = () => {
     setShowExplanationBox(false);
     showToastMessage(
       lang === 'BN'
-        ? `এফএসও ${officer.name}-এর কাছে ব্যাখ্যা চেয়ে রিকোয়েস্ট পাঠানো হয়েছে: "${explanationQuery}"`
+        ? `এফএসও ${officer.name}-এর নিকট ব্যাখ্যা তলব করা হয়েছে: "${explanationQuery}"`
         : `Explanation request dispatched to ${officer.name}: "${explanationQuery}"`
     );
     setExplanationQuery('');
@@ -101,7 +101,7 @@ export const ManagerOfficerDetail: React.FC = () => {
     setApproved(nextState);
     showToastMessage(
       nextState
-        ? (lang === 'BN' ? 'রুট এবং ভিজিট সফলভাবে অনুমোদিত হয়েছে!' : 'Route and visits approved successfully!')
+        ? (lang === 'BN' ? 'রুট ও ভিজিট অনুমোদিত হয়েছে!' : 'Route and visits approved successfully!')
         : (lang === 'BN' ? 'অনুমোদন প্রত্যাহার করা হয়েছে।' : 'Route approval withdrawn.')
     );
   };
@@ -387,7 +387,7 @@ export const ManagerOfficerDetail: React.FC = () => {
               </span>
             </div>
             <div>
-              <span className="text-[#75777d] block text-[8px] uppercase">{lang === 'BN' ? 'অতিরিক্ত অবস্থান (Dwell)' : 'Dwell-time Exceeded'}</span>
+              <span className="text-[#75777d] block text-[8px] uppercase">{lang === 'BN' ? 'অতিরিক্ত সময় ব্যয় (Dwell)' : 'Dwell-time Exceeded'}</span>
               <span className={`font-bold ${isRahim ? 'text-[#ba1a1a]' : 'text-[#006c49]'}`}>
                 {isRahim ? (lang === 'BN' ? '১টি (৪৮ মিনিট)' : '1 event (48 mins)') : (lang === 'BN' ? '০টি' : 'None')}
               </span>
@@ -454,7 +454,7 @@ export const ManagerOfficerDetail: React.FC = () => {
         <section className="bg-white rounded-2xl p-4 shadow-sm border border-[#c5c6cd]/30 space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-xs font-bold text-[#0b1c30]">
-              {lang === 'BN' ? 'ম্যানেজার রিভিউ ও মতামত' : 'Manager Review Comments'}
+              {lang === 'BN' ? 'ম্যানেজার রিভিউ ও মন্তব্য' : 'Manager Review Comments'}
             </h3>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-semibold text-[#44474c]">
@@ -479,7 +479,7 @@ export const ManagerOfficerDetail: React.FC = () => {
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="w-full bg-[#eff4ff]/30 border border-[#c5c6cd]/50 rounded-xl p-3 text-xs focus:outline-none focus:border-[#006c49] min-h-[80px]"
+            className="w-full bg-[#eff4ff]/30 border border-[#c5c6cd]/50 rounded-xl p-3 text-xs focus:outline-none focus:border-[#006c49] min-h-[120px] resize-y"
             placeholder={lang === 'BN' ? 'আপনার মন্তব্য লিখুন...' : 'Write your comments here...'}
           />
         </section>
@@ -490,7 +490,7 @@ export const ManagerOfficerDetail: React.FC = () => {
             <div className="bg-white rounded-2xl p-5 w-full max-w-[380px] shadow-2xl border border-[#c5c6cd]/30 space-y-4">
               <div className="flex justify-between items-center border-b border-[#eff4ff] pb-2">
                 <h3 className="text-xs font-bold text-[#0b1c30]">
-                  {lang === 'BN' ? 'এফএসও ব্যাখ্যা তলব' : 'Request Explanation'}
+                  {lang === 'BN' ? 'ব্যাখ্যা তলব করুন' : 'Request Explanation'}
                 </h3>
                 <button 
                   onClick={() => setShowExplanationBox(false)}
@@ -551,7 +551,7 @@ export const ManagerOfficerDetail: React.FC = () => {
               className="flex-grow flex-1 bg-white text-[#44474c] border border-[#c5c6cd] font-semibold text-xs py-3 rounded-xl flex items-center justify-center gap-1.5 hover:bg-[#eff4ff] active:scale-95 transition-all outline-none"
             >
               <HelpCircle size={15} />
-              <span>{lang === 'BN' ? 'ব্যাখ্যা চান' : 'Ask Explanation'}</span>
+              <span>{lang === 'BN' ? 'ব্যাখ্যা তলব করুন' : 'Ask Explanation'}</span>
             </button>
           </div>
           <button 
@@ -559,14 +559,14 @@ export const ManagerOfficerDetail: React.FC = () => {
             className="w-full bg-[#0b1c30] text-white font-bold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 hover:opacity-95 active:scale-[0.98] transition-all shadow-md outline-none"
           >
             <FileCheck size={16} />
-            <span>{lang === 'BN' ? 'টেরিটরি ম্যাপে রুট ট্র্যাক করুন' : 'Track Route on Map'}</span>
+            <span>{lang === 'BN' ? 'টেরিটরি ম্যাপে রুট দেখুন' : 'Track Route on Map'}</span>
           </button>
         </div>
       </main>
 
       {/* Floating Toast Notification */}
       {toast.visible && (
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-[#0e1c2f]/95 text-white px-4 py-2.5 rounded-xl shadow-lg border border-[#c5c6cd]/25 text-[10px] font-semibold transition-all duration-300 w-[90%] text-center backdrop-blur-sm animate-fade-in-up">
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-[100] bg-[#0b1c30]/95 text-white px-4 py-3 rounded-xl shadow-xl border border-white/10 text-[11px] font-semibold transition-all duration-300 w-[90%] text-center backdrop-blur-md animate-fade-in">
           {toast.message}
         </div>
       )}
