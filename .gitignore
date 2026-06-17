@@ -25,6 +25,7 @@ dist-ssr
 
 # Stitch raw data and scratch files
 stitch_raw/
+stitch_manager_features/
 scratch/
 *.zip
 

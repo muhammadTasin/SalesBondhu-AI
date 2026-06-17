@@ -9,6 +9,8 @@ interface AppHeaderProps {
   showGPSStatus?: boolean;
   onLanguageToggle?: () => void;
   lang?: 'BN' | 'EN';
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({
@@ -17,7 +19,9 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   syncTime = '২ মিনিট আগে',
   showGPSStatus = true,
   onLanguageToggle,
-  lang = 'BN'
+  lang = 'BN',
+  onRefresh,
+  isRefreshing = false
 }) => {
   const navigate = useNavigate();
 
@@ -28,10 +32,21 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         <h1 className="text-xl font-semibold text-[#0b1c30]">{title}</h1>
         <div className="flex items-center gap-2 mt-1">
           {syncTime && (
-            <span className="flex items-center gap-0.5 text-[10px] text-[#44474c]">
-              <RefreshCw size={10} className="stroke-[2.5px]" />
-              সর্বশেষ সিঙ্ক: {syncTime}
-            </span>
+            onRefresh ? (
+              <button 
+                onClick={onRefresh}
+                disabled={isRefreshing}
+                className="flex items-center gap-1 text-[10px] text-[#44474c] hover:text-[#0b1c30] transition-colors active:scale-95 outline-none"
+              >
+                <RefreshCw size={10} className={`stroke-[2.5px] ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span>{lang === 'BN' ? 'সর্বশেষ সিঙ্ক: ' : 'Last sync: '}{syncTime}</span>
+              </button>
+            ) : (
+              <span className="flex items-center gap-0.5 text-[10px] text-[#44474c]">
+                <RefreshCw size={10} className="stroke-[2.5px]" />
+                {lang === 'BN' ? 'সর্বশেষ সিঙ্ক: ' : 'Last sync: '}{syncTime}
+              </span>
+            )
           )}
           {showGPSStatus && (
             <span className="flex items-center gap-0.5 text-[10px] text-[#006c49] font-medium">

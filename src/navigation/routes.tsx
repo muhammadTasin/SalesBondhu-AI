@@ -13,8 +13,11 @@ import { TrackingTimeline } from '../screens/TrackingTimeline';
 import { EndOfDayReport } from '../screens/EndOfDayReport';
 import { PendingFollowups } from '../screens/PendingFollowups';
 import { OfflineSyncStates } from '../screens/OfflineSyncStates';
-import { ManagerDashboard } from '../screens/ManagerDashboard';
-import { ManagerOfficerDetail } from '../screens/ManagerOfficerDetail';
+import { ManagerDashboard } from '../screens/manager/ManagerDashboard';
+import { ManagerOfficerDetail } from '../screens/manager/ManagerOfficerDetail';
+import { ManagerRiskCenter } from '../screens/manager/ManagerRiskCenter';
+import { ManagerTerritoryMap } from '../screens/manager/ManagerTerritoryMap';
+import { ManagerEndDayReview } from '../screens/manager/ManagerEndDayReview';
 import { SettingsDutyPreferences } from '../screens/SettingsDutyPreferences';
 import { getCurrentRole } from '../lib/mockSession';
 
@@ -74,6 +77,9 @@ export const AppRoutes = () => {
       {/* Manager Routes */}
       <Route path="/manager" element={<RouteGuard allowedRoles={['manager', 'admin']} element={<ManagerDashboard />} />} />
       <Route path="/manager/officer/:officerId" element={<RouteGuard allowedRoles={['manager', 'admin']} element={<ManagerOfficerDetail />} />} />
+      <Route path="/manager/risks" element={<RouteGuard allowedRoles={['manager', 'admin']} element={<ManagerRiskCenter />} />} />
+      <Route path="/manager/territory" element={<RouteGuard allowedRoles={['manager', 'admin']} element={<ManagerTerritoryMap />} />} />
+      <Route path="/manager/reports" element={<RouteGuard allowedRoles={['manager', 'admin']} element={<ManagerEndDayReview />} />} />
       
       {/* Shared Shared Routes */}
       <Route path="/settings" element={<RouteGuard allowedRoles={['sales_officer', 'manager', 'admin']} element={<SettingsDutyPreferences />} />} />
