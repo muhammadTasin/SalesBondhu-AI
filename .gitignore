@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Stitch raw data and scratch files
+stitch_raw/
+scratch/
+*.zip
+
