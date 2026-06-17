@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
-import { FileCheck, RefreshCw, Route, Wallet, ShoppingCart, TrendingUp, Clock, MessageSquare, Hourglass, BarChart3, AlertTriangle, Info, AlertOctagon, AlertCircle, FileEdit, Edit2, Camera, CheckCircle, Send, Save } from 'lucide-react';
+import { FileCheck, RefreshCw, Route, Wallet, ShoppingCart, TrendingUp, Clock, MessageSquare, Hourglass, BarChart3, AlertTriangle, Info, AlertOctagon, AlertCircle, FileEdit, Edit2, Camera, Send, Save } from 'lucide-react';
+import { PhotoProofUploader } from '../components/PhotoProofUploader';
 
 export const EndOfDayReport: React.FC = () => {
   const navigate = useNavigate();
@@ -213,42 +214,10 @@ export const EndOfDayReport: React.FC = () => {
             <Camera size={14} className="text-[#44474c] shrink-0" />
             {lang === 'BN' ? 'ভিজিটের ছবি প্রমাণ' : 'Visit Photos Proof'}
           </h3>
-          <div className="flex items-center justify-between bg-[#f8f9ff] p-2 rounded-lg border border-[#e5eeff]">
-            <span className="text-[10px] font-bold text-[#44474c]">৩টি ছবি আপলোড করা হয়েছে</span>
-            <CheckCircle size={14} className="text-[#006c49] shrink-0" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            <div className="flex flex-col gap-1">
-              <div className="aspect-square bg-[#eff4ff] rounded-lg overflow-hidden border border-[#c5c6cd]/30 relative">
-                <img
-                  alt="Store Front"
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1nOsPm_Z-iB48eoRe82WWNl_U0R8IcJYw3M63cp0_inNzVuUqeCCZbLFli1e5o3TBmqqLJdfq2XXylRE0v-Y_K2pF4ujPsuT-GTyXnsovmlUp0xfnwyZiYWCqmcprmHcEMQEryBtCKfZlDMGRafRcNDxaQl9hvcCu3THLgz5wXP3wKJDljd6rwIBFFlzkDFTNsQf_-N9vlR6BsfBz-3h59ohxhf5-LBZ6JGNZiejaVLp6hYptTU08BPOGTrBd83DclAeAYLFX0Q"
-                />
-              </div>
-              <span className="text-[8px] text-center text-[#75777d] font-bold">দোকান</span>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <div className="aspect-square bg-[#eff4ff] rounded-lg overflow-hidden border border-[#c5c6cd]/30 relative">
-                <img
-                  alt="Product Display"
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSph1LU2L7QJTzpBOwQP9aIcLLoPBB1QDhMkxHCl6WuWk9bhJUBgwn5CPyioldyUN_eOWtGdY9O_9rduyfjU83PWImumzPjiPv-cSE2J-KGq0IMzCDS0DiaICxhoPQq5-lCpc3515ZJQamzlguFAfWqwo_hPBIZpMDilVbNqz33oAyfVDtYRxfKX79edAP-N55zD8ecaB-Kz0PYdrioz-RX9GlwZ5o1lZpI3pRfy6O0ok2ruc6-JgxLoeE_18sTOuYMUUb5alsPg"
-                />
-              </div>
-              <span className="text-[8px] text-center text-[#75777d] font-bold">প্রদর্শনী</span>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <button className="aspect-square bg-white border border-dashed border-[#c5c6cd] hover:bg-[#f8f9ff] rounded-lg flex flex-col items-center justify-center text-[#75777d]">
-                <Camera size={16} className="shrink-0" />
-                <span className="text-[8px] font-bold mt-1">যোগ করুন</span>
-              </button>
-              <span className="text-[8px] text-center text-[#75777d] font-bold">নতুন ছবি</span>
-            </div>
-          </div>
+          <PhotoProofUploader
+            lang={lang}
+            uploadStyle="eod-report"
+          />
         </section>
 
         {/* Report Action Buttons */}

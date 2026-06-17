@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { AppHeader } from '../components/AppHeader';
-import { Package, Megaphone, Camera, Download, StopCircle } from 'lucide-react';
+import { Download, StopCircle } from 'lucide-react';
+import { PhotoProofUploader } from '../components/PhotoProofUploader';
 
 export const ActiveVisit: React.FC = () => {
   const navigate = useNavigate();
@@ -160,34 +161,10 @@ export const ActiveVisit: React.FC = () => {
           </div>
 
           {/* Proof Photos Area */}
-          <div>
-            <span className="block text-[11px] font-bold text-[#44474c] mb-2">
-              {lang === 'BN' ? 'প্রমাণস্বরূপ ছবি' : 'Proof of Visit Photos'}
-            </span>
-            <div className="grid grid-cols-2 gap-2 mb-2">
-              <button
-                type="button"
-                className="border border-dashed border-[#c5c6cd] rounded-lg p-2.5 flex flex-col items-center gap-1 text-[#44474c] hover:bg-[#eff4ff] transition-colors"
-              >
-                <Package size={18} className="shrink-0 text-[#44474c]" />
-                <span className="text-[9px] font-bold">{lang === 'BN' ? 'স্টক পজিশন' : 'Stock Position'}</span>
-              </button>
-              <button
-                type="button"
-                className="border border-dashed border-[#c5c6cd] rounded-lg p-2.5 flex flex-col items-center gap-1 text-[#44474c] hover:bg-[#eff4ff] transition-colors"
-              >
-                <Megaphone size={18} className="shrink-0 text-[#44474c]" />
-                <span className="text-[9px] font-bold">{lang === 'BN' ? 'ব্র্যান্ডিং মেটেরিয়াল' : 'Branding Materials'}</span>
-              </button>
-            </div>
-            <button
-              type="button"
-              className="w-full border-2 border-dashed border-[#c5c6cd] rounded-xl p-3 flex flex-col items-center justify-center text-[#44474c] hover:bg-[#eff4ff] hover:border-[#0e1c2f] transition-colors gap-0.5"
-            >
-              <Camera size={20} className="shrink-0 text-[#44474c]" />
-              <span className="text-[10px] font-bold">{lang === 'BN' ? 'অন্যান্য ছবি যোগ করুন' : 'Add Other Photos'}</span>
-            </button>
-          </div>
+          <PhotoProofUploader
+            lang={lang}
+            uploadStyle="active-visit"
+          />
 
           {/* Action Buttons */}
           <div className="space-y-3 pt-2">
