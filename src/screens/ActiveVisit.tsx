@@ -4,6 +4,7 @@ import { PhoneFrame } from '../components/PhoneFrame';
 import { AppHeader } from '../components/AppHeader';
 import { Download, StopCircle } from 'lucide-react';
 import { PhotoProofUploader } from '../components/PhotoProofUploader';
+import { saveVisitCompletion } from '../services/visitDraftService';
 
 export const ActiveVisit: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ export const ActiveVisit: React.FC = () => {
   const [followupDate, setFollowupDate] = useState('');
   const [competitorUpdate, setCompetitorUpdate] = useState('');
   const [notes, setNotes] = useState('');
+  const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
+  const [showBlankConfirm, setShowBlankConfirm] = useState(false);
 
   useEffect(() => {
     console.log('Active visit initialized for ID:', visitId);
@@ -26,10 +29,61 @@ export const ActiveVisit: React.FC = () => {
     return () => clearInterval(interval);
   }, [visitId]);
 
+  const completeVisit = (completedWithoutData: boolean) => {
+    const missingFields: string[] = [];
+    const filledFields: string[] = [];
+
+    if (orderAmount.trim() === '') missingFields.push('orderAmount'); else filledFields.push('orderAmount');
+    if (collectionAmount.trim() === '') missingFields.push('collectionAmount'); else filledFields.push('collectionAmount');
+    if (followupDate.trim() === '') missingFields.push('followupDate'); else filledFields.push('followupDate');
+    if (competitorUpdate.trim() === '') missingFields.push('competitorUpdate'); else filledFields.push('competitorUpdate');
+    if (notes.trim() === '') missingFields.push('notes'); else filledFields.push('notes');
+    if (selectedPhotos.length === 0) missingFields.push('proofPhotos'); else filledFields.push('proofPhotos');
+
+    saveVisitCompletion({
+      visitId: visitId || 'unknown-visit',
+      dealerId: '1', // Rahman Traders has ID '1' in map/preparation
+      completedAt: new Date().toISOString(),
+      completedWithoutData,
+      missingFields,
+      filledFields,
+      note: completedWithoutData 
+        ? "Sales officer completed visit without entering order, collection, note, or proof photo."
+        : "Sales officer completed visit with data.",
+      data: completedWithoutData ? undefined : {
+        orderAmount,
+        collectionAmount,
+        followupDate,
+        competitorUpdate,
+        notes,
+        photosCount: selectedPhotos.length
+      }
+    });
+
+    if (completedWithoutData) {
+      alert(lang === 'BN' ? 'ভিজিট শেষ হয়েছে — কোনো তথ্য দেওয়া হয়নি' : 'Visit completed — no data provided');
+    } else {
+      alert(lang === 'BN' ? 'ভিজিটটি সফলভাবে সম্পন্ন হয়েছে!' : 'Visit completed successfully!');
+    }
+    navigate('/today');
+  };
+
   const handleEndVisit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(lang === 'BN' ? 'ভিজিটটি সফলভাবে সম্পন্ন হয়েছে!' : 'Visit completed successfully!');
-    navigate('/today');
+    
+    const isFormBlank = 
+      orderAmount.trim() === '' &&
+      collectionAmount.trim() === '' &&
+      followupDate.trim() === '' &&
+      competitorUpdate.trim() === '' &&
+      notes.trim() === '' &&
+      selectedPhotos.length === 0;
+
+    if (isFormBlank) {
+      setShowBlankConfirm(true);
+    } else {
+      completeVisit(false);
+    }
   };
 
   const handleSaveOffline = () => {
@@ -164,6 +218,7 @@ export const ActiveVisit: React.FC = () => {
           <PhotoProofUploader
             lang={lang}
             uploadStyle="active-visit"
+            onPhotosChange={setSelectedPhotos}
           />
 
           {/* Action Buttons */}
@@ -186,6 +241,42 @@ export const ActiveVisit: React.FC = () => {
           </div>
         </form>
       </main>
+
+      {/* Confirmation Modal for Blank Visit Completion */}
+      {showBlankConfirm && (
+        <div className="absolute inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-5 w-full max-w-[320px] shadow-xl border border-[#c5c6cd]/30 space-y-4 animate-fade-in text-center">
+            <h3 className="text-sm font-bold text-[#ba1a1a]">
+              {lang === 'BN' ? 'কোনো ভিজিট তথ্য দেওয়া হয়নি' : 'No Visit Data Provided'}
+            </h3>
+            <p className="text-[11px] text-[#44474c] leading-relaxed">
+              {lang === 'BN' 
+                ? 'আপনি এখনো অর্ডার, কালেকশন, নোট বা ছবি যোগ করেননি। তবুও ভিজিট শেষ করলে রিপোর্টে ‘তথ্য দেওয়া হয়নি’ হিসেবে সংরক্ষণ হবে।'
+                : 'You have not added any order, collection, notes, or photos yet. Ending the visit now will save it as "No Data Provided" in the report.'
+              }
+            </p>
+            <div className="flex flex-col gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowBlankConfirm(false)}
+                className="w-full bg-[#eff4ff] text-[#0b1c30] border border-[#c5c6cd]/30 rounded-xl py-2.5 text-xs font-bold hover:bg-[#dce9ff] transition-colors active:scale-95"
+              >
+                {lang === 'BN' ? 'তথ্য যোগ করব' : 'Add Info'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowBlankConfirm(false);
+                  completeVisit(true);
+                }}
+                className="w-full bg-[#ba1a1a] text-white rounded-xl py-2.5 text-xs font-bold hover:bg-red-700 transition-colors active:scale-95"
+              >
+                {lang === 'BN' ? 'তবুও ভিজিট শেষ করুন' : 'End Visit Anyway'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </PhoneFrame>
   );
 };

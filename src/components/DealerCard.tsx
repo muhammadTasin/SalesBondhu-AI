@@ -7,8 +7,10 @@ interface DealerCardProps {
   priorityLevel: 'urgent' | 'warning' | 'normal' | 'lead';
   priorityText: string;
   actionText?: string;
-  onActionClick?: () => void;
+  onActionClick?: (e: React.MouseEvent) => void;
+  onCardClick?: () => void;
   className?: string;
+  isActive?: boolean;
 }
 
 export const DealerCard: React.FC<DealerCardProps> = ({
@@ -18,7 +20,9 @@ export const DealerCard: React.FC<DealerCardProps> = ({
   priorityText,
   actionText = 'বিস্তারিত →',
   onActionClick,
-  className = ''
+  onCardClick,
+  className = '',
+  isActive = false
 }) => {
   let indicatorColor = '';
   let borderColor = 'border-[#c5c6cd]/30';
@@ -42,8 +46,37 @@ export const DealerCard: React.FC<DealerCardProps> = ({
       break;
   }
 
+  const handleCardClick = () => {
+    if (onCardClick) {
+      onCardClick();
+    }
+  };
+
+  const handleActionClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering onCardClick
+    if (onActionClick) {
+      onActionClick(e);
+    }
+  };
+
   return (
-    <div className={`flex-shrink-0 w-64 bg-white rounded-xl p-3 border flex flex-col space-y-2 shadow-sm ${borderColor} ${className}`}>
+    <div
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`Select dealer ${name}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+      className={`flex-shrink-0 w-64 bg-white rounded-xl p-3 border flex flex-col space-y-2 shadow-sm transition-all cursor-pointer ${
+        isActive 
+          ? 'ring-2 ring-[#006c49] border-transparent scale-[1.02]' 
+          : `${borderColor} hover:bg-[#eff4ff]/20`
+      } ${className}`}
+    >
       <div className="flex justify-between items-start">
         <div>
           <p className="text-sm font-semibold text-[#0b1c30]">{name}</p>
@@ -59,7 +92,7 @@ export const DealerCard: React.FC<DealerCardProps> = ({
           {priorityText}
         </span>
         <button
-          onClick={onActionClick}
+          onClick={handleActionClick}
           className="text-xs text-[#006c49] hover:underline font-semibold cursor-pointer"
         >
           {actionText}
@@ -68,3 +101,4 @@ export const DealerCard: React.FC<DealerCardProps> = ({
     </div>
   );
 };
+export default DealerCard;
