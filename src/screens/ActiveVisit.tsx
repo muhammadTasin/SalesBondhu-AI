@@ -466,12 +466,18 @@ export const ActiveVisit: React.FC = () => {
       }
     };
 
+    // TODO: Replace demo local queue with real authenticated Supabase/API sync.
+    // Always save to localStorage draft/queue for demo purposes
+    console.log('Demo Mode: Saving visit report to local offline queue...', payload);
+    saveVisitCompletion(payload);
+
+    const isSyncEnabled = import.meta.env.VITE_ENABLE_SUPABASE_VISIT_SYNC === 'true';
     let apiSuccess = false;
     let errorMessage = '';
 
-    if (isOnline) {
+    if (isOnline && isSyncEnabled && supabase) {
       try {
-        console.log('API is active. Attempting Supabase database insert...');
+        console.log('API sync is enabled. Attempting Supabase database insert...');
         
         // 1. Resolve Dealer UUID from code
         let dbDealerId = null;
@@ -491,6 +497,7 @@ export const ActiveVisit: React.FC = () => {
           }
         }
 
+        // TODO: Attach current officer ID from real auth session.
         // 2. Resolve User ID from Supabase Auth
         const { data: authData } = await supabase.auth.getUser();
         let officerId = authData.user?.id;
@@ -506,6 +513,9 @@ export const ActiveVisit: React.FC = () => {
             officerId = dbUsers[0].id;
           }
         }
+
+        // TODO: Upload photo proof to storage bucket.
+        // Currently using mock image URL for demonstration.
 
         if (officerId && dbDealerId) {
           // 3. Insert into officer_visits
@@ -551,21 +561,26 @@ export const ActiveVisit: React.FC = () => {
     if (apiSuccess) {
       alert(lang === 'BN' ? 'ভিজিট রিপোর্ট সফলভাবে সরাসরি ডাটাবেজে সংরক্ষিত হয়েছে!' : 'Visit report successfully synced and saved directly to database!');
     } else {
-      // Offline fallback / Demo Mode
-      console.log('Saving visit report to local offline queue...', payload);
-      saveVisitCompletion(payload);
-      
+      // Show local queue success message for demo fallback or disabled flag
       if (!isOnline) {
         alert(
           lang === 'BN' 
             ? 'ইন্টারনেট সংযোগ নেই! রিপোর্ট অফলাইন ড্রাফটে সেভ করা হয়েছে।' 
             : 'No internet connection! Report successfully saved to offline drafts.'
         );
-      } else {
+      } else if (isSyncEnabled && supabase) {
+        // Sync enabled but failed
         alert(
           lang === 'BN' 
-            ? `সার্ভার এরর: ${errorMessage || 'ডেটাবেজ টেবিল সংগতি মেলেনি'}। ডেমো মোডে স্থানীয়ভাবে সেভ করা হয়েছে।` 
-            : `Server error: ${errorMessage || 'DB Schema mismatch'}. Saved locally in demo mode.`
+            ? `সিঙ্ক ব্যর্থ হয়েছে: ${errorMessage || 'ডেটাবেজ টেবিল সংগতি মেলেনি'}। ডেমো মোডে স্থানীয়ভাবে সেভ করা হয়েছে।` 
+            : `Sync failed: ${errorMessage || 'DB Schema mismatch'}. Saved locally in demo mode.`
+        );
+      } else {
+        // Default Demo Mode popup
+        alert(
+          lang === 'BN' 
+            ? 'ডেমো মোড: ভিজিট স্থানীয়ভাবে সংরক্ষিত হয়েছে এবং সিঙ্ক লাইনে রাখা হয়েছে।' 
+            : 'Demo mode: visit saved locally and sync queued.'
         );
       }
     }
