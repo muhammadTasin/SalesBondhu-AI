@@ -29,3 +29,17 @@ stitch_manager_features/
 scratch/
 *.zip
 
+# Security ignores
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+private/
+client-data/
+confidential/
+real-data/
+*.csv
+*.xlsx
+*.sql.dump
