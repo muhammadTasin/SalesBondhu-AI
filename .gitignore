@@ -28,4 +28,19 @@ stitch_raw/
 stitch_manager_features/
 scratch/
 *.zip
+stitch_route_fix_logic/
 
+# Security ignores
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+private/
+client-data/
+confidential/
+real-data/
+*.csv
+*.xlsx
+*.sql.dump
