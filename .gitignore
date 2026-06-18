@@ -28,6 +28,7 @@ stitch_raw/
 stitch_manager_features/
 scratch/
 *.zip
+stitch_route_fix_logic/
 
 # Security ignores
 .env
