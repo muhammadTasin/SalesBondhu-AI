@@ -1,5 +1,38 @@
 # React + TypeScript + Vite
 
+<!-- SALESBONDHU_MOBILE_PREVIEW_START -->
+
+## 📱 SalesBondhu Mobile Product Preview
+
+> These Stitch design screens present the current mobile product direction.
+> This repository contains an earlier web prototype; the production Flutter
+> implementation is maintained privately.
+
+<p align="center">
+  <img
+    src="./docs/project-screenshots/salesbondhu-login-role-selection.png"
+    width="23%"
+    alt="SalesBondhu login and role selection design preview"
+  />
+  <img
+    src="./docs/project-screenshots/salesbondhu-duty-tracking-consent.png"
+    width="23%"
+    alt="SalesBondhu duty tracking consent design preview"
+  />
+  <img
+    src="./docs/project-screenshots/salesbondhu-today-dashboard.png"
+    width="23%"
+    alt="SalesBondhu salesman dashboard design preview"
+  />
+  <img
+    src="./docs/project-screenshots/salesbondhu-optimized-route.png"
+    width="23%"
+    alt="SalesBondhu optimized sales route design preview"
+  />
+</p>
+
+<!-- SALESBONDHU_MOBILE_PREVIEW_END -->
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
