@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+# SalesBondhu AI — Manager Web Dashboard & Prototype
 
 <!-- SALESBONDHU_MOBILE_PREVIEW_START -->
 
@@ -33,74 +33,48 @@
 
 <!-- SALESBONDHU_MOBILE_PREVIEW_END -->
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## About SalesBondhu AI
 
-Currently, two official plugins are available:
+SalesBondhu AI is a mobile-first field-sales co-pilot and management platform designed to help sales officers organize daily market visits, prioritize dealer interactions, and streamline duty workflows.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This repository (`SalesBondhu-AI`) contains the **earlier web prototype and manager dashboard**, which provides desktop web panels for dashboard reporting, risk analysis, and supervisor monitoring. The mobile field application used by sales officers on the ground is maintained separately in a private Flutter repository.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## The Problem
+Field sales officers and their managers often struggle with fragmented information. Essential data—such as dealer stock levels, transaction histories, outstanding credit, and specific manager instructions—is frequently scattered across different systems. This leads to inefficient route planning, missed follow-ups, and lagging market visibility for managers.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## The Solution
+SalesBondhu AI converts scattered field-sales data into a guided daily workflow. The platform provides:
+1. **Priority & Context**: Identifying which dealer is most critical to visit first and why (e.g., credit overdue, declining sales volume).
+2. **Actionable Insights**: Recommending next-best-actions like payment collection or specific product offerings.
+3. **Logistics & Tracking**: Optimizing visit routes and providing transparent duty tracking and visit outcomes for managers.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Architecture & Pipeline
+The system is designed to scale across a decoupled architecture:
+* **Manager/Admin Web Dashboard (React/Vite)**: This repository. A desktop web panel for supervisors to monitor field activities, review risk analysis, and manage teams.
+* **Sales Officer Mobile App (Flutter/Dart)**: The Android field tool optimized for mobile responsiveness and offline-first sync (maintained privately).
+* **Backend + Intelligence Layer**: Shared API endpoints managing security, geofenced location checks, transaction syncing, and an AI intelligence engine for collection risk detection and route optimization.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Technical Stack
+* **Framework**: React + TypeScript
+* **Build Tool**: Vite
+* **Linting & Code Quality**: ESLint (Type-aware rules enabled)
+* **Styling**: Modern CSS/Tailwind (planned/implemented based on components)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Local Setup
+1. Clone the repository and navigate to the project directory.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
