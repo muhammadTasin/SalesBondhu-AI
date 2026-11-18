@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { BottomNav } from '../components/BottomNav';
-import { Bot, Send, Mic, TrendingDown, ArrowLeft, CheckCircle2, MessageSquare, FileText } from 'lucide-react';
+import { Bot, Send, Mic, TrendingDown, ArrowLeft, CheckCircle2, MessageSquare, FileText, BookOpen, Calculator } from 'lucide-react';
+import { askCoach } from '../ai/coachEngine';
+import { toBanglaDigits } from '../ai/banglish';
+import type { CoachIntent, SourceRef } from '../ai/types';
 
 interface ChatMessage {
   sender: 'user' | 'ai';
   text: string;
+  intent?: CoachIntent;
+  sources?: SourceRef[];
   insight?: {
     action: string;
     why: string;
@@ -43,14 +48,33 @@ export const SalesCoach: React.FC = () => {
     setLang((prev) => (prev === 'BN' ? 'EN' : 'BN'));
   };
 
-  const promptChips = [
+  const promptChips: { text: string; key: string; grounded?: boolean }[] = [
+    { text: '২৯০০ স্কয়ার ফিট দেয়ালে ১ কোট প্রাইমার + ২ কোট টপকোট, কত লিটার?', key: 'estimate_bn', grounded: true },
+    { text: 'WeatherGuard koto khon e shukay?', key: 'kb_banglish', grounded: true },
     { text: 'এখন কী করব?', key: 'what_now' },
     { text: 'কালেকশন কীভাবে চাইব?', key: 'ask_collection' },
     { text: 'ডিলার রাগ করেছে', key: 'dealer_angry' },
     { text: 'কী কথা বলব?', key: 'what_to_say' }
   ];
 
-  const handleChipClick = (text: string) => {
+  // Grounded questions go through the coach engine: calculator or document retrieval,
+  // always returned with the source pages it used.
+  const askGrounded = (text: string) => {
+    setMessages((prev) => [...prev, { sender: 'user', text }]);
+    const answer = askCoach(text, lang);
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'ai', text: answer.text, intent: answer.intent, sources: answer.sources },
+      ]);
+    }, 600);
+  };
+
+  const handleChipClick = (text: string, grounded?: boolean) => {
+    if (grounded) {
+      askGrounded(text);
+      return;
+    }
     let responseInsight = {
       action: 'পরিস্থিতি শান্ত করুন',
       why: 'ডিলারের অভিযোগ বা অসন্তুষ্টি আগে মনোযোগ দিয়ে শুনতে হবে।',
@@ -99,23 +123,7 @@ export const SalesCoach: React.FC = () => {
     if (!inputVal.trim()) return;
     const userText = inputVal;
     setInputVal('');
-    
-    setMessages((prev) => [
-      ...prev,
-      { sender: 'user', text: userText }
-    ]);
-
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: 'ai',
-          text: lang === 'BN' 
-            ? 'আমি আপনার প্রশ্নটি বুঝতে পেরেছি। এই মুহূর্তে আমাদের রহমান ট্রেডার্স-এর জন্য মূল ফোকাস হলো বকেয়া কালেকশন ও স্টক নিশ্চিত করা।'
-            : 'I understand your query. For Rahman Traders, our current primary focus is overdue collection and stock placement.'
-        }
-      ]);
-    }, 1000);
+    askGrounded(userText);
   };
 
   return (
@@ -195,8 +203,28 @@ export const SalesCoach: React.FC = () => {
                   </div>
 
                   {msg.text ? (
-                    <div className="bg-white rounded-2xl rounded-tl-sm p-3 border border-[#c5c6cd]/20 text-xs text-[#0b1c30] shadow-sm">
-                      {msg.text}
+                    <div className="bg-white rounded-2xl rounded-tl-sm p-3 border border-[#c5c6cd]/20 text-xs text-[#0b1c30] shadow-sm space-y-2">
+                      {msg.intent === 'paint_estimate' && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#006c49] bg-[#e8f5e9] px-2 py-0.5 rounded-full">
+                          <Calculator size={11} className="shrink-0" />
+                          {lang === 'BN' ? 'হিসাব করা হয়েছে, অনুমান নয়' : 'Calculated, not guessed'}
+                        </span>
+                      )}
+                      <p className="whitespace-pre-line leading-relaxed">{msg.text}</p>
+                      {msg.sources && msg.sources.length > 0 && (
+                        <div className="pt-2 border-t border-[#e5eeff] space-y-1">
+                          {msg.sources.map((s) => (
+                            <div key={s.docId + s.page} className="flex items-center gap-1 text-[10px] text-[#44474c]">
+                              <BookOpen size={11} className="text-[#1976D2] shrink-0" />
+                              <span>
+                                {lang === 'BN'
+                                  ? `উৎস: ${s.title}, পৃষ্ঠা ${toBanglaDigits(String(s.page))}`
+                                  : `Source: ${s.title}, page ${s.page}`}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     msg.insight && (
@@ -246,7 +274,7 @@ export const SalesCoach: React.FC = () => {
           {promptChips.map((chip) => (
             <button
               key={chip.key}
-              onClick={() => handleChipClick(chip.text)}
+              onClick={() => handleChipClick(chip.text, chip.grounded)}
               className="shrink-0 bg-white border border-[#c5c6cd]/40 hover:bg-[#eff4ff] text-[#0b1c30] font-semibold text-[11px] px-3.5 py-1.5 rounded-full transition-colors whitespace-nowrap active:scale-95 shadow-sm"
             >
               {chip.text}
