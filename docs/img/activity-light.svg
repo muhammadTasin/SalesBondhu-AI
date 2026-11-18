@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+<title id="t">SalesBondhu app: commits merged to main per month, 2026</title>
+<desc id="d">Jun 88, Jul 42, Aug 141, Sep 72, Oct 14, Nov 89. November counted to the 18th.</desc>
+<rect width="720" height="320" rx="12" fill="#fcfcfb"/>
+<g font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+<text x="48" y="32" font-size="16" font-weight="600" fill="#0b0b0b">Commits merged to main per month, 2026</text>
+<text x="48" y="54" font-size="12.5" fill="#52514e">Private SalesBondhu app repo (Flutter app + backend) · 446 commits on main · 96 merged pull requests</text>
+<line x1="48" x2="696" y1="210.0" y2="210.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="40" y="214.0" font-size="11" text-anchor="end" fill="#898781">50</text>
+<line x1="48" x2="696" y1="144.0" y2="144.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="40" y="148.0" font-size="11" text-anchor="end" fill="#898781">100</text>
+<line x1="48" x2="696" y1="78.0" y2="78.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="40" y="82.0" font-size="11" text-anchor="end" fill="#898781">150</text>
+<path d="M71.8,276.0 V163.8 Q71.8,159.8 75.8,159.8 H128.2 Q132.2,159.8 132.2,163.8 V276.0 Z" fill="#2a78d6"/>
+<text x="102.0" y="152.8" font-size="12" font-weight="600" text-anchor="middle" fill="#52514e">88</text>
+<text x="102.0" y="294.0" font-size="12" text-anchor="middle" fill="#898781">Jun</text>
+<path d="M179.8,276.0 V224.6 Q179.8,220.6 183.8,220.6 H236.2 Q240.2,220.6 240.2,224.6 V276.0 Z" fill="#2a78d6"/>
+<text x="210.0" y="213.6" font-size="12" font-weight="600" text-anchor="middle" fill="#52514e">42</text>
+<text x="210.0" y="294.0" font-size="12" text-anchor="middle" fill="#898781">Jul</text>
+<path d="M287.8,276.0 V93.9 Q287.8,89.9 291.8,89.9 H344.2 Q348.2,89.9 348.2,93.9 V276.0 Z" fill="#2a78d6"/>
+<text x="318.0" y="82.9" font-size="12" font-weight="600" text-anchor="middle" fill="#52514e">141</text>
+<text x="318.0" y="294.0" font-size="12" text-anchor="middle" fill="#898781">Aug</text>
+<path d="M395.8,276.0 V185.0 Q395.8,181.0 399.8,181.0 H452.2 Q456.2,181.0 456.2,185.0 V276.0 Z" fill="#2a78d6"/>
+<text x="426.0" y="174.0" font-size="12" font-weight="600" text-anchor="middle" fill="#52514e">72</text>
+<text x="426.0" y="294.0" font-size="12" text-anchor="middle" fill="#898781">Sep</text>
+<path d="M503.8,276.0 V261.5 Q503.8,257.5 507.8,257.5 H560.2 Q564.2,257.5 564.2,261.5 V276.0 Z" fill="#2a78d6"/>
+<text x="534.0" y="250.5" font-size="12" font-weight="600" text-anchor="middle" fill="#52514e">14</text>
+<text x="534.0" y="294.0" font-size="12" text-anchor="middle" fill="#898781">Oct</text>
+<path d="M611.8,276.0 V162.5 Q611.8,158.5 615.8,158.5 H668.2 Q672.2,158.5 672.2,162.5 V276.0 Z" fill="#2a78d6"/>
+<text x="642.0" y="151.5" font-size="12" font-weight="600" text-anchor="middle" fill="#52514e">89</text>
+<text x="642.0" y="294.0" font-size="12" text-anchor="middle" fill="#898781">Nov*</text>
+<line x1="48" x2="696" y1="276" y2="276" stroke="#c3c2b7" stroke-width="1"/>
+<text x="696" y="312" font-size="10.5" text-anchor="end" fill="#898781">* November counted to the 18th</text>
+</g></svg>
