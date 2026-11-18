@@ -30,7 +30,8 @@ import {
   Send,
   Upload,
   Check,
-  X
+  X,
+  ShieldAlert,
 } from 'lucide-react';
 
 export const ActiveVisit: React.FC = () => {
@@ -417,7 +418,7 @@ export const ActiveVisit: React.FC = () => {
   // Photo Upload Simulation
   const handlePhotoUploadSimulation = () => {
     setPhotoAdded(true);
-    setPhotoUrl('https://lh3.googleusercontent.com/aida-public/AB6AXuCRmEaIiCZOi1aA0v4JBRYf0kkLdbVTIZKMgiZhQZ4FGW4xnkLDQFdeiiRDZaT7tx8zPJuHh7HJf1Zojt-CPH7PTeuavUwLZgEvGO-kMf4tLAynVdVcwUV3Pqij0WrvQ5Z30v5lZ9OCZw3sLX5DL2pedzhwKiQTVGviwL89E8rxNuZ4QtQfjpwTj03ceXF2U2TzYjT7czTokzlfhrXgChGQc6f66hmFP-MvQey0q1Zbejrvtl1cjhQPS05NPICb6RuZHACw_qpJ-A');
+    setPhotoUrl('/demo/visit-photo.png');
     showToastMessage(lang === 'BN' ? 'ভিজিট প্রমাণ ছবি সফলভাবে যুক্ত হয়েছে!' : 'Visit photo proof successfully attached!');
   };
 
@@ -741,7 +742,7 @@ export const ActiveVisit: React.FC = () => {
                 <img 
                   alt="Profile" 
                   className="w-full h-full object-cover" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRmEaIiCZOi1aA0v4JBRYf0kkLdbVTIZKMgiZhQZ4FGW4xnkLDQFdeiiRDZaT7tx8zPJuHh7HJf1Zojt-CPH7PTeuavUwLZgEvGO-kMf4tLAynVdVcwUV3Pqij0WrvQ5Z30v5lZ9OCZw3sLX5DL2pedzhwKiQTVGviwL89E8rxNuZ4QtQfjpwTj03ceXF2U2TzYjT7czTokzlfhrXgChGQc6f66hmFP-MvQey0q1Zbejrvtl1cjhQPS05NPICb6RuZHACw_qpJ-A"
+                  src="/demo/visit-photo.png"
                 />
               </div>
             </div>
@@ -1079,6 +1080,15 @@ export const ActiveVisit: React.FC = () => {
                     <MessageCircle size={14} />
                   </div>
                   <span className="text-[10px] font-bold text-[#0b1c30] text-center leading-tight truncate w-full">WhatsApp</span>
+                </button>
+                <button
+                  onClick={() => navigate('/sos')}
+                  className="flex-1 min-w-[80px] bg-[#ffdad6] border border-[#ba1a1a]/30 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:bg-[#ffdad6]/70 active:scale-95 transition-all outline-none"
+                >
+                  <div className="bg-[#ba1a1a] p-2 rounded-full text-white shrink-0">
+                    <ShieldAlert size={14} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[#ba1a1a] text-center leading-tight truncate w-full">SOS</span>
                 </button>
                 <button
                   onClick={() => handleQuickAction('photo')}
@@ -1464,6 +1474,16 @@ export const ActiveVisit: React.FC = () => {
                       <MessageCircle size={14} />
                     </div>
                     <span className="text-[10px] font-bold text-[#0b1c30]">WhatsApp</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/sos')}
+                    className="bg-[#ffdad6] border border-[#ba1a1a]/30 rounded-xl p-3 flex flex-col items-center justify-center min-w-[80px] gap-1.5 shadow-sm hover:bg-[#ffdad6]/70 active:scale-95 transition-all outline-none"
+                  >
+                    <div className="bg-[#ba1a1a] p-2 rounded-full text-white shrink-0">
+                      <ShieldAlert size={14} />
+                    </div>
+                    <span className="text-[10px] font-bold text-[#ba1a1a]">SOS</span>
                   </button>
                   <button
                     type="button"

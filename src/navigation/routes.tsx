@@ -9,6 +9,7 @@ import { TodayVisitPlan } from '../screens/TodayVisitPlan';
 import { VisitPreparation } from '../screens/VisitPreparation';
 import { ActiveVisit } from '../screens/ActiveVisit';
 import { SalesCoach } from '../screens/SalesCoach';
+import { SosSafety } from '../screens/SosSafety';
 import { TrackingTimeline } from '../screens/TrackingTimeline';
 import { EndOfDayReport } from '../screens/EndOfDayReport';
 import { PendingFollowups } from '../screens/PendingFollowups';
@@ -69,6 +70,7 @@ export const AppRoutes = () => {
       <Route path="/visit-prep/:dealerId" element={<RouteGuard allowedRoles={['sales_officer']} element={<VisitPreparation />} />} />
       <Route path="/active-visit/:visitId" element={<RouteGuard allowedRoles={['sales_officer']} element={<ActiveVisit />} />} />
       <Route path="/coach" element={<RouteGuard allowedRoles={['sales_officer']} element={<SalesCoach />} />} />
+      <Route path="/sos" element={<RouteGuard allowedRoles={['sales_officer']} element={<SosSafety />} />} />
       <Route path="/timeline" element={<RouteGuard allowedRoles={['sales_officer']} element={<TrackingTimeline />} />} />
       <Route path="/end-day-report" element={<RouteGuard allowedRoles={['sales_officer']} element={<EndOfDayReport />} />} />
       <Route path="/followups" element={<RouteGuard allowedRoles={['sales_officer']} element={<PendingFollowups />} />} />
