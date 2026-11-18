@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, Package, Megaphone, X, CheckCircle } from 'lucide-react';
+import { Camera, Package, Megaphone, X, CheckCircle, Lock } from 'lucide-react';
+import { stampPhoto, shortHash, type PhotoProofStamp } from '../lib/photoProof';
 
 interface PhotoProofUploaderProps {
   lang: 'BN' | 'EN';
@@ -12,6 +13,8 @@ interface SelectedPhoto {
   file: File;
   previewUrl: string;
   label: string;
+  /** GPS, time and SHA-256 locked to the photo at capture. */
+  stamp?: PhotoProofStamp;
 }
 
 export const PhotoProofUploader: React.FC<PhotoProofUploaderProps> = ({
@@ -90,6 +93,12 @@ export const PhotoProofUploader: React.FC<PhotoProofUploaderProps> = ({
       if (onPhotosChange) {
         onPhotosChange(newPhotos.map((p) => p.file));
       }
+      // Lock location, time and fingerprint to each new photo.
+      validPhotos.forEach((photo) => {
+        stampPhoto(photo.file).then((stamp) => {
+          setSelectedPhotos((prev) => prev.map((p) => (p.id === photo.id ? { ...p, stamp } : p)));
+        });
+      });
     }
 
     // Reset input value to allow selecting same file again
@@ -123,12 +132,12 @@ export const PhotoProofUploader: React.FC<PhotoProofUploaderProps> = ({
     {
       id: 'initial-1',
       label: lang === 'BN' ? 'দোকান' : 'Store Front',
-      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB1nOsPm_Z-iB48eoRe82WWNl_U0R8IcJYw3M63cp0_inNzVuUqeCCZbLFli1e5o3TBmqqLJdfq2XXylRE0v-Y_K2pF4ujPsuT-GTyXnsovmlUp0xfnwyZiYWCqmcprmHcEMQEryBtCKfZlDMGRafRcNDxaQl9hvcCu3THLgz5wXP3wKJDljd6rwIBFFlzkDFTNsQf_-N9vlR6BsfBz-3h59ohxhf5-LBZ6JGNZiejaVLp6hYptTU08BPOGTrBd83DclAeAYLFX0Q',
+      url: '/demo/store-front.png',
     },
     {
       id: 'initial-2',
       label: lang === 'BN' ? 'প্রদর্শনী' : 'Product Display',
-      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSph1LU2L7QJTzpBOwQP9aIcLLoPBB1QDhMkxHCl6WuWk9bhJUBgwn5CPyioldyUN_eOWtGdY9O_9rduyfjU83PWImumzPjiPv-cSE2J-KGq0IMzCDS0DiaICxhoPQq5-lCpc3515ZJQamzlguFAfWqwo_hPBIZpMDilVbNqz33oAyfVDtYRxfKX79edAP-N55zD8ecaB-Kz0PYdrioz-RX9GlwZ5o1lZpI3pRfy6O0ok2ruc6-JgxLoeE_18sTOuYMUUb5alsPg',
+      url: '/demo/product-display.png',
     },
   ];
 
@@ -227,6 +236,21 @@ export const PhotoProofUploader: React.FC<PhotoProofUploaderProps> = ({
                   <span className="text-[8px] text-center text-[#75777d] font-bold truncate max-w-full">
                     {photo.label}
                   </span>
+                  {photo.stamp ? (
+                    <div className="bg-[#e8f5e9] rounded px-1 py-0.5 text-[7px] leading-tight text-[#1b5e20] font-semibold">
+                      <span className="flex items-center gap-0.5">
+                        <Lock size={8} className="shrink-0" />
+                        GPS ±{photo.stamp.accuracyM} m · {new Date(photo.stamp.capturedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      <span className="block font-mono truncate" title={photo.stamp.sha256}>
+                        #{shortHash(photo.stamp.sha256)}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-[7px] text-center text-[#75777d]">
+                      {lang === 'BN' ? 'লক করা হচ্ছে…' : 'Locking…'}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
