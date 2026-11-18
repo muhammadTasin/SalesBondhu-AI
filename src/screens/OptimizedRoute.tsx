@@ -35,7 +35,7 @@ export const OptimizedRoute: React.FC = () => {
           <img
             alt="Map Route"
             className="w-full h-full object-cover opacity-90"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXotafYZAGvGsdSevJvyRbQGWoNdumz3zpMgONSMLG9pWv7XOVsHXMO5oRwkPFE5UPVpDIrqLiCVruSHgILDROHYyV2o4PsmKO28ekvjzzkBvw5JXB1e0DrfRrGZodvrUB2K-XnqzgB9lPfPEApkOeQtFEp6M2oWHznS5L2It7rixBWmN4C58-tZRA7QQsivnhHzCQkwF1OyZOUK9QBDoSVBfIY3XfLbnPcs13FZBHPgpnT3hPEgYJM-bZd5EPuGlsakTVJvAgZA"
+            src="/demo/route-map.png"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#f8f9ff] via-transparent to-transparent" />
         </div>

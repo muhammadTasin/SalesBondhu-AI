@@ -73,7 +73,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           <img
             alt="Arif's Profile"
             className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCXvlrPlagz0YnSVeaZp9jm0T7UVWGrXY8izLkLoK1YtgJth88feKwyL90Jh8tHp3OyqSrGHNmMMAaMSkSkMa60LMDEIlnz88L1KLPXeMVUSnMAc07SkFFkAHYx0FFLXRxRFc689aDNVR8PaXSwX4FaQcBrPcZj8uqIg-62rKVP2-J9itamAPd1Ebe6OtcTPApck9fFX1fRl7ekLB2zpxXePxOQv3eEDEB3fa3rWbaF1ajs1WlQCS8HeGYwnOldNUTlAZBXkF5jA"
+            src="/demo/officer-avatar.png"
           />
         </button>
       </div>

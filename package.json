@@ -1,27 +1,26 @@
 {
-  "name": "vite-temp",
+  "name": "salesbondhu-ai",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
     "lint": "eslint .",
+    "test": "vitest run",
     "preview": "vite preview",
     "security:scan": "bash scripts/security-scan.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
-    "@tanstack/react-query": "^5.101.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "lucide-react": "^1.20.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.18.0",
-    "tailwind-merge": "^3.6.0",
-    "zod": "^4.4.3",
-    "zustand": "^5.0.14"
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -38,6 +37,8 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.12"
-  }
+    "vite": "^8.0.12",
+    "vitest": "^5.1.1"
+  },
+  "description": "SalesBondhu AI showcase edition: Bangla-first field-sales co-pilot UI prototype with mock data."
 }

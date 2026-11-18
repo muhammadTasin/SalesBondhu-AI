@@ -48,7 +48,7 @@ export const SettingsDutyPreferences: React.FC = () => {
               className="w-full h-full object-cover"
               src={role === 'manager' || role === 'admin'
                 ? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                : "https://lh3.googleusercontent.com/aida-public/AB6AXuBCXvlrPlagz0YnSVeaZp9jm0T7UVWGrXY8izLkLoK1YtgJth88feKwyL90Jh8tHp3OyqSrGHNmMMAaMSkSkMa60LMDEIlnz88L1KLPXeMVUSnMAc07SkFFkAHYx0FFLXRxRFc689aDNVR8PaXSwX4FaQcBrPcZj8uqIg-62rKVP2-J9itamAPd1Ebe6OtcTPApck9fFX1fRl7ekLB2zpxXePxOQv3eEDEB3fa3rWbaF1ajs1WlQCS8HeGYwnOldNUTlAZBXkF5jA"
+                : "/demo/officer-avatar.png"
               }
             />
           </div>
