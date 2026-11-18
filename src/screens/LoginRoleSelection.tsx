@@ -4,6 +4,7 @@ import { ActionButton } from '../components/ActionButton';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { Rocket, IdCard, Lock, Eye, EyeOff, Fingerprint, User, ShieldAlert } from 'lucide-react';
 import { setCurrentRole } from '../lib/mockSession';
+import { brand } from '../config/brand';
 
 export const LoginRoleSelection: React.FC = () => {
   const navigate = useNavigate();
@@ -47,10 +48,23 @@ export const LoginRoleSelection: React.FC = () => {
           <div className="w-16 h-16 bg-[#eff4ff] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-[#c5c6cd]/20">
             <Rocket size={32} className="text-[#0e1c2f]" />
           </div>
-          <h1 className="text-3xl font-bold text-[#0b1c30] tracking-tight">SalesBondhu AI</h1>
+          <h1 className="text-3xl font-bold text-[#0b1c30] tracking-tight">{brand.appName}</h1>
           <p className="text-sm font-medium text-[#44474c] mt-1">
             {lang === 'BN' ? 'আপনার স্মার্ট সেলস কো-পাইলট' : 'Your Smart Sales Co-Pilot'}
           </p>
+          {/* White-label strip: the client's brand, swapped per deployment */}
+          <div className="mt-3 inline-flex items-center gap-2 bg-white border border-[#c5c6cd]/40 rounded-full pl-1 pr-3 py-1 shadow-sm">
+            <span
+              className="w-6 h-6 rounded-full text-[10px] font-extrabold text-white flex items-center justify-center"
+              style={{ background: brand.colors.primary }}
+            >
+              {brand.monogram}
+            </span>
+            <span className="text-[11px] font-semibold text-[#0b1c30]">
+              {lang === 'BN' ? brand.clientNameBn : brand.clientName}
+              {brand.demoMode && <span className="text-[#75777d] font-normal"> · demo</span>}
+            </span>
+          </div>
         </div>
 
         {/* Login Card */}
